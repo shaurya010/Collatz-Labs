@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>zkAssess — Prove Your Code Is Quantum-Ready. Without Showing It.</title>
+<meta name="description" content="zkAssess assesses codebases for quantum-vulnerable cryptography and issues a signed, redacted attestation — the source never leaves your trust boundary.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d12;
+    --bg-panel: #12161d;
+    --bg-panel-alt: #0d1117;
+    --border: #232a35;
+    --border-soft: #1a2029;
+    --text: #e9edf2;
+    --text-muted: #8a94a3;
+    --text-dim: #5b6472;
+    --gold: #f2b84b;
+    --gold-dim: #a3823a;
+    --green: #4ade9c;
+    --red: #e8664f;
+    --redact: #05070a;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:var(--mono);}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  ::selection{background:var(--gold); color:#0a0d12;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(10,13,18,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-weight:600; font-size:17px; letter-spacing:0.02em;
+  }
+  .logo .brk{color:var(--gold);}
+  .navlinks{display:flex; gap:34px; align-items:center;}
+  .navlinks a{
+    font-family:var(--mono); font-size:13px; color:var(--text-muted);
+    letter-spacing:0.03em; transition:color .15s ease;
+  }
+  .navlinks a:hover{color:var(--text);}
+  .nav-cta{
+    font-family:var(--mono); font-size:13px; padding:9px 18px;
+    border:1px solid var(--gold); color:var(--gold);
+    border-radius:2px; transition:all .18s ease;
+  }
+  .nav-cta:hover{background:var(--gold); color:#0a0d12;}
+  .navlinks-mobile-toggle{display:none;}
+  .breadcrumb{
+    font-family:var(--mono); font-size:12px; color:var(--text-dim);
+    padding:9px 32px; border-bottom:1px solid var(--border-soft); background:var(--bg-panel-alt);
+    display:flex; justify-content:center; gap:6px;
+  }
+  .breadcrumb a{color:var(--gold);}
+  .breadcrumb a:hover{text-decoration:underline;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 70px;
+    border-bottom:1px solid var(--border-soft);
+    position:relative;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--border-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.35;
+    mask-image:linear-gradient(to bottom, black, transparent 85%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative; z-index:1;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:12px; letter-spacing:0.12em;
+    color:var(--gold); text-transform:uppercase;
+    border:1px solid var(--gold-dim); padding:6px 12px; border-radius:2px;
+    margin-bottom:28px;
+  }
+  .eyebrow::before{content:"●"; font-size:8px; color:var(--gold); animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  h1{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(32px, 5vw, 58px);
+    line-height:1.08; letter-spacing:-0.01em;
+    max-width:820px; margin-bottom:26px;
+  }
+  h1 .accent{color:var(--gold);}
+  .hero-sub{
+    font-size:18px; color:var(--text-muted); max-width:600px; margin-bottom:38px;
+  }
+  .hero-ctas{display:flex; gap:16px; margin-bottom:64px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:14px; padding:14px 26px;
+    border-radius:2px; display:inline-block; transition:all .18s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--gold); color:#0a0d12; font-weight:600;}
+  .btn-primary:hover{background:#ffce6e;}
+  .btn-secondary{border-color:var(--border); color:var(--text);}
+  .btn-secondary:hover{border-color:var(--text-muted);}
+
+  /* ---------- HERO DEMO: redaction pipeline ---------- */
+  .pipeline-demo{
+    display:grid; grid-template-columns:1fr auto 1fr;
+    gap:0; border:1px solid var(--border); border-radius:6px;
+    overflow:hidden; background:var(--bg-panel-alt);
+  }
+  .pane{padding:22px 24px;}
+  .pane-label{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.1em;
+    color:var(--text-dim); text-transform:uppercase; margin-bottom:16px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .pane-owner{background:var(--bg-panel);}
+  .code-line{
+    font-family:var(--mono); font-size:13px; color:var(--text-muted);
+    white-space:pre; padding:2px 0; position:relative;
+  }
+  .code-line .kw{color:#7aa2f7;}
+  .code-line .str{color:var(--green);}
+  .code-line.flagged{
+    background:rgba(232,102,79,0.08);
+    border-left:2px solid var(--red);
+    padding-left:10px; margin-left:-12px; color:var(--text);
+  }
+  .flag-tag{
+    display:inline-block; font-family:var(--mono); font-size:10px;
+    color:var(--red); border:1px solid rgba(232,102,79,0.4); border-radius:2px;
+    padding:1px 6px; margin-left:10px; letter-spacing:0.05em;
+  }
+  .boundary{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:0 6px; border-left:1px dashed var(--border); border-right:1px dashed var(--border);
+    background:repeating-linear-gradient(180deg, transparent, transparent 8px, var(--border-soft) 8px, var(--border-soft) 9px);
+  }
+  .boundary span{
+    writing-mode:vertical-rl; font-family:var(--mono); font-size:10px;
+    letter-spacing:0.15em; color:var(--text-dim); text-transform:uppercase;
+    padding:16px 0;
+  }
+  .pane-verifier{background:var(--bg-panel);}
+  .attestation-card{
+    border:1px solid var(--border); border-radius:4px; padding:16px;
+    background:var(--bg-panel-alt);
+  }
+  .redact-bar{
+    height:11px; background:var(--redact); border-radius:2px; margin:6px 0;
+    position:relative; overflow:hidden;
+  }
+  .redact-bar.w1{width:88%;} .redact-bar.w2{width:62%;} .redact-bar.w3{width:74%;}
+  .redact-bar::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation:sheen 3.5s infinite;
+  }
+  @keyframes sheen{0%{transform:translateX(-100%);} 100%{transform:translateX(200%);}}
+  .attest-row{
+    display:flex; justify-content:space-between; font-family:var(--mono);
+    font-size:11px; color:var(--text-dim); margin-top:14px; padding-top:12px;
+    border-top:1px solid var(--border-soft);
+  }
+  .attest-row b{color:var(--green); font-weight:500;}
+  .seal{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:11px; color:var(--gold);
+    border:1px solid var(--gold-dim); border-radius:20px; padding:4px 10px;
+    margin-top:14px; animation:stamp .5s ease-out;
+  }
+  @keyframes stamp{from{transform:scale(1.4) rotate(-8deg); opacity:0;} to{transform:scale(1) rotate(0); opacity:1;}}
+
+  @media (max-width:820px){
+    .pipeline-demo{grid-template-columns:1fr;}
+    .boundary{flex-direction:row; padding:10px 0; border-left:none; border-right:none; border-top:1px dashed var(--border); border-bottom:1px dashed var(--border);}
+    .boundary span{writing-mode:horizontal-tb; padding:0;}
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:88px 0; border-bottom:1px solid var(--border-soft);}
+  .sec-label{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.12em;
+    color:var(--gold); text-transform:uppercase; margin-bottom:14px;
+  }
+  h2{
+    font-family:var(--mono); font-weight:600; font-size:clamp(24px,3.4vw,36px);
+    letter-spacing:-0.01em; max-width:680px; margin-bottom:18px;
+  }
+  .sec-intro{color:var(--text-muted); max-width:640px; font-size:16px; margin-bottom:52px;}
+
+  /* two-phase split */
+  .split-grid{display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .split-card{background:var(--bg-panel); padding:32px;}
+  .split-card .num{font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+  .split-card h3{font-family:var(--mono); font-size:19px; margin:10px 0 12px; font-weight:600;}
+  .split-card p{color:var(--text-muted); font-size:14.5px;}
+  @media (max-width:720px){.split-grid{grid-template-columns:1fr;}}
+
+  /* boundary diagram */
+  .boundary-diagram{
+    border:1px solid var(--border); border-radius:6px; padding:36px;
+    background:var(--bg-panel-alt); position:relative;
+  }
+  .bd-row{display:flex; align-items:stretch; gap:0; flex-wrap:wrap;}
+  .bd-inside{
+    flex:1; min-width:280px; border:1px dashed var(--gold-dim); border-radius:4px; padding:22px;
+    background:rgba(242,184,75,0.03);
+  }
+  .bd-inside-label{font-family:var(--mono); font-size:11px; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:16px;}
+  .bd-steps{display:flex; flex-direction:column; gap:10px;}
+  .bd-step{
+    display:flex; align-items:center; gap:12px; font-family:var(--mono); font-size:13px;
+    color:var(--text-muted); padding:10px 14px; background:var(--bg-panel); border:1px solid var(--border-soft); border-radius:4px;
+  }
+  .bd-step .dot{width:6px; height:6px; border-radius:50%; background:var(--text-dim); flex-shrink:0;}
+  .bd-arrow{display:flex; align-items:center; justify-content:center; padding:0 18px; font-family:var(--mono); color:var(--text-dim); font-size:20px;}
+  .bd-outside{
+    min-width:180px; border:1px solid var(--border); border-radius:4px; padding:22px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    background:var(--bg-panel);
+  }
+  .bd-outside-label{font-family:var(--mono); font-size:11px; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px;}
+  .bd-outside strong{font-family:var(--mono); color:var(--text); font-size:15px;}
+  @media (max-width:900px){.bd-row{flex-direction:column;} .bd-arrow{transform:rotate(90deg); padding:10px 0;}}
+
+  /* pattern taxonomy table */
+  table{width:100%; border-collapse:collapse; font-size:14px;}
+  thead th{
+    text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--text-dim); padding:12px 16px; border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:16px; border-bottom:1px solid var(--border-soft); color:var(--text-muted); vertical-align:top;}
+  tbody tr:hover td{background:rgba(255,255,255,0.015);}
+  tbody td:first-child{color:var(--text); font-family:var(--mono); font-weight:500; white-space:nowrap;}
+  .tag{
+    display:inline-block; font-family:var(--mono); font-size:10.5px; padding:2px 8px; border-radius:2px;
+    letter-spacing:0.04em; margin-right:4px;
+  }
+  .tag-quantum{background:rgba(232,102,79,0.12); color:#f18a72; border:1px solid rgba(232,102,79,0.3);}
+  .tag-weak{background:rgba(242,184,75,0.1); color:var(--gold); border:1px solid var(--gold-dim);}
+  .tag-config{background:rgba(122,162,247,0.1); color:#93b4f7; border:1px solid rgba(122,162,247,0.3);}
+  .tag-safe{background:rgba(74,222,156,0.1); color:var(--green); border:1px solid rgba(74,222,156,0.3);}
+  .table-wrap{border:1px solid var(--border); border-radius:6px; overflow-x:auto; background:var(--bg-panel-alt);}
+
+  /* scoring formula */
+  .formula-box{
+    font-family:var(--mono); background:var(--bg-panel-alt); border:1px solid var(--border);
+    border-radius:6px; padding:28px 32px; margin-bottom:44px; overflow-x:auto;
+  }
+  .formula-box .f-main{font-size:17px; color:var(--text); white-space:nowrap;}
+  .formula-box .f-note{font-size:12px; color:var(--text-dim); margin-top:14px;}
+  .weights-row{display:flex; gap:14px; flex-wrap:wrap; margin-top:20px;}
+  .weight-chip{
+    font-family:var(--mono); font-size:12px; border:1px solid var(--border); border-radius:4px;
+    padding:8px 14px; color:var(--text-muted); display:flex; gap:8px; align-items:center;
+  }
+  .weight-chip b{color:var(--text);}
+
+  .profile-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden; margin-top:44px;}
+  .profile-card{background:var(--bg-panel); padding:26px;}
+  .profile-card .p-name{font-family:var(--mono); font-weight:600; font-size:15px; margin-bottom:10px; color:var(--gold);}
+  .profile-card p{font-size:13.5px; color:var(--text-muted);}
+
+  /* verifier learns / never learns */
+  .learn-grid{display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .learn-col{background:var(--bg-panel); padding:30px;}
+  .learn-col h4{font-family:var(--mono); font-size:13px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:20px;}
+  .learn-col.yes h4{color:var(--green);}
+  .learn-col.no h4{color:var(--red);}
+  .learn-list{list-style:none;}
+  .learn-list li{
+    font-size:14px; color:var(--text-muted); padding:10px 0 10px 22px; position:relative;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .learn-list li:last-child{border-bottom:none;}
+  .learn-list li::before{position:absolute; left:0; top:10px; font-family:var(--mono); font-size:13px;}
+  .learn-col.yes li::before{content:"✓"; color:var(--green);}
+  .learn-col.no li::before{content:"✕"; color:var(--red);}
+  @media (max-width:720px){.learn-grid{grid-template-columns:1fr;}}
+
+  /* roadmap timeline */
+  .roadmap{position:relative; padding-left:36px;}
+  .roadmap::before{content:""; position:absolute; left:9px; top:6px; bottom:6px; width:1px; background:var(--border);}
+  .rm-item{position:relative; padding-bottom:40px;}
+  .rm-item:last-child{padding-bottom:0;}
+  .rm-item::before{
+    content:""; position:absolute; left:-36px; top:4px; width:9px; height:9px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--gold-dim);
+  }
+  .rm-item .rm-tag{font-family:var(--mono); font-size:11px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px;}
+  .rm-item h4{font-family:var(--mono); font-size:16px; font-weight:600; margin-bottom:8px;}
+  .rm-item p{color:var(--text-muted); font-size:14px; max-width:620px;}
+
+  /* marquee */
+  .marquee{
+    border-bottom:1px solid var(--border-soft); padding:22px 0; overflow:hidden;
+    background:var(--bg-panel-alt);
+  }
+  .marquee-track{display:flex; white-space:nowrap; animation:scroll 28s linear infinite; width:max-content;}
+  .marquee-track span{
+    font-family:var(--mono); font-size:14px; letter-spacing:0.1em; color:var(--text-dim);
+    padding:0 28px; text-transform:uppercase;
+  }
+  .marquee-track span:nth-child(odd){color:var(--gold-dim);}
+  @keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+  /* threat model / limitations honest section */
+  .honest-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  .honest-col h4{font-family:var(--mono); font-size:13px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:18px;}
+  .honest-col ul{list-style:none;}
+  .honest-col li{font-size:14px; color:var(--text-muted); padding:10px 0; border-bottom:1px solid var(--border-soft);}
+  .honest-col li:last-child{border-bottom:none;}
+  @media (max-width:720px){.honest-grid{grid-template-columns:1fr;}}
+
+  /* final CTA */
+  .final-cta{text-align:center; padding:100px 0;}
+  .final-cta h2{margin:0 auto 20px; max-width:640px;}
+  .final-cta .sec-intro{margin:0 auto 40px;}
+  .final-cta .hero-ctas{justify-content:center;}
+
+  footer{padding:56px 0 40px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; margin-bottom:40px;}
+  .footer-brand .logo{margin-bottom:14px;}
+  .footer-brand p{color:var(--text-dim); font-size:13.5px; max-width:340px;}
+  .footer-col h5{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:14px;}
+  .footer-col a, .footer-col div{display:block; font-size:13.5px; color:var(--text-muted); padding:4px 0;}
+  .footer-col a:hover{color:var(--text);}
+  .footer-bottom{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    padding-top:24px; border-top:1px solid var(--border-soft);
+    font-family:var(--mono); font-size:12px; color:var(--text-dim);
+  }
+
+  @media (max-width:720px){
+    .navlinks{display:none;}
+    .hero{padding:64px 0 48px;}
+    section{padding:56px 0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="breadcrumb"><a href="index.html">Lattice</a><span>/</span><span>zkAssess</span></div>
+<header>
+  <nav>
+    <div class="logo"><span>zk<span class="brk">Assess</span></span></div>
+    <div class="navlinks">
+      <a href="#boundary">Protocol</a>
+      <a href="#detection">Detection Engine</a>
+      <a href="#scoring">Scoring</a>
+      <a href="#privacy">Attestation</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+    <a href="#cta" class="nav-cta">Request Access</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">v0.2 · Living Whitepaper · July 2026</div>
+    <h1>Prove your code is<br>quantum-ready.<br><span class="accent">Never show it to anyone.</span></h1>
+    <p class="hero-sub">zkAssess scans your codebase for quantum-vulnerable and classically weak cryptography, then issues a signed, cryptographically committed attestation. The analysis runs entirely inside your trust boundary — only a redacted score ever leaves it.</p>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn btn-primary">Request Access</a>
+      <a href="#boundary" class="btn btn-secondary">See the Protocol ↓</a>
+    </div>
+
+    <div class="pipeline-demo">
+      <div class="pane pane-owner">
+        <div class="pane-label"><span>repository — full visibility</span><span>owner's machine</span></div>
+        <div class="code-line"><span class="kw">import</span> crypto <span class="kw">from</span> <span class="str">'node:crypto'</span></div>
+        <div class="code-line"></div>
+        <div class="code-line flagged">crypto.generateKeyPair(<span class="str">'rsa'</span>, { modulusLength: 1024 })<span class="flag-tag">RSA_USAGE</span></div>
+        <div class="code-line"></div>
+        <div class="code-line">crypto.createHash(<span class="kw">'aes-256-gcm'</span>)</div>
+        <div class="code-line">  .update(payload, <span class="str">'utf8'</span>)</div>
+        <div class="code-line"></div>
+        <div class="code-line flagged">crypto.createHash(<span class="str">'md5'</span>)<span class="flag-tag">MD5_HASH</span></div>
+      </div>
+      <div class="boundary"><span>trust boundary</span></div>
+      <div class="pane pane-verifier">
+        <div class="pane-label"><span>attestation — signed & redacted</span><span>verifier receives</span></div>
+        <div class="attestation-card">
+          <div class="redact-bar w1"></div>
+          <div class="redact-bar w2"></div>
+          <div class="redact-bar w3"></div>
+          <div class="attest-row"><span>score</span><b>39 / 100</b></div>
+          <div class="attest-row"><span>pattern_set_version</span><span>2026.07.1</span></div>
+          <div class="attest-row"><span>policy</span><span>nist-cnsa-2.0</span></div>
+          <div class="seal">🔒 HMAC-SHA256 verified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Never leaves your boundary</span><span>Deterministic, not discretionary</span><span>Every finding is provable</span><span>Reproducible by any verifier</span>
+    <span>Never leaves your boundary</span><span>Deterministic, not discretionary</span><span>Every finding is provable</span><span>Reproducible by any verifier</span>
+  </div>
+</div>
+
+<section id="boundary">
+  <div class="wrap">
+    <div class="sec-label">01 · Why Zero-Knowledge Doesn't Directly Apply</div>
+    <h2>A security scan is open-ended discovery. A zero-knowledge proof needs a known claim.</h2>
+    <p class="sec-intro">A ZK proof establishes that a specific, already-identified statement holds — it can't discover a vulnerability nobody has named yet. So zkAssess splits the problem into the two shapes each technique actually handles.</p>
+
+    <div class="split-grid">
+      <div class="split-card">
+        <div class="num">PHASE 1</div>
+        <h3>Discovery (open-ended)</h3>
+        <p>A deterministic scanner checks every line against a fixed, versioned list of known-bad and known-good cryptographic patterns. This needs full visibility, so it stays inside your trust boundary — local, in CI, or inside a TEE.</p>
+      </div>
+      <div class="split-card">
+        <div class="num">PHASE 2</div>
+        <h3>Attestation (narrow, known claim)</h3>
+        <p>Once a finding exists, "this exact redacted line is really present in a file with hash H, at line N" is precisely the narrow, provable statement that selective-disclosure techniques are built for.</p>
+      </div>
+    </div>
+
+    <div style="height:52px"></div>
+
+    <div class="boundary-diagram">
+      <div class="bd-row">
+        <div class="bd-inside">
+          <div class="bd-inside-label">Inside the repository owner's trust boundary</div>
+          <div class="bd-steps">
+            <div class="bd-step"><span class="dot"></span> Pattern engine scans the repository</div>
+            <div class="bd-step"><span class="dot"></span> Findings redacted at the point of detection</div>
+            <div class="bd-step"><span class="dot"></span> Merkle tree built, inclusion proofs generated</div>
+            <div class="bd-step"><span class="dot"></span> Score computed, attestation signed</div>
+          </div>
+        </div>
+        <div class="bd-arrow">→</div>
+        <div class="bd-outside">
+          <div class="bd-outside-label">Crosses the boundary</div>
+          <strong>Signed attestation only</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="detection">
+  <div class="wrap">
+    <div class="sec-label">02 · Detection Engine</div>
+    <h2>Deterministic pattern matching. Not an AI's opinion.</h2>
+    <p class="sec-intro">"This codebase uses RSA" is checkable. "This codebase is insecure" isn't — it's an unbounded judgment call. zkAssess keeps the provable part of the pipeline entirely deterministic: regex and syntax matching against a public, versioned pattern list.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Examples</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-quantum">QUANTUM-VULNERABLE</span></td>
+            <td>RSA, ECDSA / ECDH / EdDSA and named curves, Diffie-Hellman, DSA</td>
+            <td>Breakable by Shor's algorithm on a sufficiently large quantum computer</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-weak">CLASSICALLY WEAK</span></td>
+            <td>MD5, SHA-1, DES, 3DES, RC4, RC2</td>
+            <td>Already broken or impractically weak, independent of quantum computing</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-config">CONFIGURATION</span></td>
+            <td>ECB mode, RSA keys under 2048 bits, static IVs / salts</td>
+            <td>The primitive may be sound but the usage pattern undermines it</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-safe">QUANTUM-SAFE</span></td>
+            <td>AES-256, ChaCha20-Poly1305, SHA-256/3, BLAKE2/3, ML-KEM, ML-DSA, SLH-DSA, Falcon</td>
+            <td>Positive confirmation of already-good cryptographic hygiene</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="scoring">
+  <div class="wrap">
+    <div class="sec-label">03 · Scoring Model</div>
+    <h2>One reproducible formula. As many risk postures as you have compliance regimes.</h2>
+    <p class="sec-intro">The baseline score is simple and public: findings are weighted by severity, summed, and subtracted from 100. Because the formula and weights are versioned alongside the pattern set, any verifier can recompute the same number from the same inputs.</p>
+
+    <div class="formula-box">
+      <div class="f-main">Score = max( 0,  100 − Σ w(severity) · [category ≠ quantum-safe] )</div>
+      <div class="weights-row">
+        <div class="weight-chip"><b>Critical</b> 25</div>
+        <div class="weight-chip"><b>High</b> 12</div>
+        <div class="weight-chip"><b>Medium</b> 5</div>
+        <div class="weight-chip"><b>Low</b> 2</div>
+        <div class="weight-chip"><b>Informational</b> 0</div>
+      </div>
+      <div class="f-note">Default severity weights. One critical DES finding plus two high findings (RSA, MD5) → 100 − (25+12+12) = 51 under baseline.</div>
+    </div>
+
+    <p class="sec-intro" style="margin-bottom:0;">No single formula reflects every organization's risk tolerance. A payments company may need any broken cipher to be an automatic failure; a government contractor may need quantum-vulnerable findings weighted well above everything else. zkAssess makes the weighting function itself a declared, versioned input — it travels with the attestation, so a policy can never be quietly loosened after the fact.</p>
+
+    <div class="profile-grid">
+      <div class="profile-card"><div class="p-name">Baseline</div><p>Table 4 default weights. No category multipliers.</p></div>
+      <div class="profile-card"><div class="p-name">PCI-DSS</div><p>Any classically-weak cipher is an automatic failure. ECB mode and static IVs weighted above baseline.</p></div>
+      <div class="profile-card"><div class="p-name">Healthcare / HIPAA</div><p>Balanced weighting across weak and quantum-vulnerable categories; emphasis on config weaknesses common in legacy health-record systems.</p></div>
+      <div class="profile-card"><div class="p-name">Government / NIST CNSA 2.0</div><p>Quantum-vulnerable multiplier raised well above baseline. Quantum-safe bonus enabled to track migration progress.</p></div>
+      <div class="profile-card"><div class="p-name">Startup / Prototype</div><p>Lower overall weights, no automatic-failure thresholds — visibility and trend-tracking over a hard gate.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <div class="sec-label">04 · Privacy-Preserving Attestation Layer</div>
+    <h2>Redact at detection. Commit with Merkle proofs. Sign the result.</h2>
+    <p class="sec-intro">A finding is recorded with only a bounded window of context around the matched text — by default twenty characters on either side. Every other line in the file is hashed into a Merkle tree and never retained. A verifier can confirm a flagged line is genuinely part of a file with a given hash, without ever receiving the file.</p>
+
+    <div class="learn-grid">
+      <div class="learn-col yes">
+        <h4>The verifier receives</h4>
+        <ul class="learn-list">
+          <li>The overall quantum-readiness score</li>
+          <li>Which pattern IDs matched, and how many times</li>
+          <li>A short, bounded redacted snippet per finding</li>
+          <li>The file path and line number of each finding</li>
+          <li>A cryptographic Merkle inclusion proof per finding</li>
+          <li>The pattern-set version, for reproducibility</li>
+        </ul>
+      </div>
+      <div class="learn-col no">
+        <h4>The verifier never receives</h4>
+        <ul class="learn-list">
+          <li>The repository itself, in any form</li>
+          <li>The full contents of any scanned file</li>
+          <li>Surrounding code, business logic, or comments</li>
+          <li>Any file that contains zero findings</li>
+          <li>Secrets or proprietary logic incidentally present</li>
+          <li>Your identity, unless you disclose it out of band</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">Honest about V0.1</div>
+    <h2>A Merkle proof is an honest, buildable stand-in. Not the end state.</h2>
+    <p class="sec-intro">A true zero-knowledge circuit would go further than what the current reference implementation does. We'd rather tell you where the line sits today than overstate it.</p>
+    <div class="honest-grid">
+      <div class="honest-col">
+        <h4>What holds today</h4>
+        <ul>
+          <li>Attestations can't be forged without the signing key</li>
+          <li>Tampering with score or proofs invalidates the signature or the Merkle verification</li>
+          <li>The pattern set is public, versioned, and shipped with every attestation</li>
+        </ul>
+      </div>
+      <div class="honest-col">
+        <h4>What's not solved yet</h4>
+        <ul>
+          <li>Redacted snippets are plaintext — a verifier with enough findings could infer file structure</li>
+          <li>Line position and hash are disclosed, which could confirm a guess at known file contents</li>
+          <li>Trust in the attestor is currently single-party, not decentralized</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-label">05 · Roadmap</div>
+    <h2>Every stage is a version bump toward a stronger guarantee.</h2>
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="rm-tag">Highest priority</div>
+        <h4>A true zero-knowledge circuit</h4>
+        <p>Replace the Merkle inclusion proof with a circuit that proves a pattern match exists in a committed file without revealing the line's content or position at all.</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-tag">Trust model</div>
+        <h4>Decentralized multi-attestor network</h4>
+        <p>Independent attestor nodes, selected through an auction mechanism with economic staking, remove the need to trust any single signer.</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-tag">Outsourced scanning</div>
+        <h4>TEE-based analysis</h4>
+        <p>A split-trust architecture across two Trusted Execution Environments, for cases where even the repository owner's own infrastructure shouldn't see plaintext.</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-tag">Signature layer</div>
+        <h4>Post-quantum signatures</h4>
+        <p>ML-DSA (Dilithium) as an alternative to HMAC-SHA256 for public, many-verifier attestations — keeping the protocol's own signatures quantum-resistant end to end.</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-tag">Coverage</div>
+        <h4>Expanded pattern coverage</h4>
+        <p>TLS and ciphersuite configuration scanning, dependency-manifest checks for known-vulnerable packages, and AST-based matching to cut false positives and negatives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta" id="cta">
+  <div class="wrap">
+    <div class="sec-label" style="text-align:center;">Get Started</div>
+    <h2>Assess your codebase. Keep it yours.</h2>
+    <p class="sec-intro">Run the analysis inside your own boundary. Share only what a verifier needs to trust the result.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn btn-primary">Request Access</a>
+      <a href="#" class="btn btn-secondary">Read the Whitepaper (PDF)</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span>zk<span class="brk">Assess</span></span></div>
+        <p>A protocol for assessing code for quantum-vulnerable cryptography while minimizing what any external verifier ever needs to see.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Protocol</h5>
+        <a href="#boundary">Trust boundary</a>
+        <a href="#detection">Detection engine</a>
+        <a href="#scoring">Scoring model</a>
+        <a href="#privacy">Attestation layer</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Security considerations</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <div>contact@zkassess.dev</div>
+        <a href="#">Request a briefing</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 zkAssess. Whitepaper v0.2, July 2026.</span>
+      <span>pattern_set_version 2026.07.1</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
