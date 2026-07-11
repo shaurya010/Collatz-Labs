@@ -116,7 +116,7 @@
   /* ---------- MISSION STATEMENT ---------- */
   .mission-statement{font-family:var(--mono); font-size:20px; line-height:1.5; color:var(--text); max-width:700px; margin-bottom:46px; border-left:2px solid var(--gold); padding-left:24px;}
 
-  .path-row{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .path-row{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
   .path-card{background:var(--bg-panel); padding:28px; display:flex; flex-direction:column;}
   .path-card.live{background:var(--bg-panel-alt);}
   .path-tag{font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:20px; display:inline-block; margin-bottom:14px; width:fit-content;}
@@ -238,9 +238,14 @@
         <p>Match the fix to your findings and requirements — timeline, risk tolerance, compliance regime.</p>
       </div>
       <div class="path-card">
-        <div class="path-tag next">Step 3 · Finalize</div>
-        <h4>Replace, test, finalize</h4>
-        <p>Roll out the chosen algorithms, validate them, and finalize the migration.</p>
+        <div class="path-tag next">Step 3 · Replace</div>
+        <h4>Replace</h4>
+        <p>Roll out the chosen algorithms across your systems, replacing the flagged primitives.</p>
+      </div>
+      <div class="path-card">
+        <div class="path-tag next">Step 4 · Finalize</div>
+        <h4>Test and finalize</h4>
+        <p>Validate the replacement, then sign off and finalize the migration.</p>
       </div>
     </div>
   </div>
@@ -274,9 +279,9 @@
   <div class="wrap" style="text-align:center;">
     <div class="sec-label" style="text-align:center;">Get Started</div>
     <h2>Start with knowing what you're running.</h2>
-    <p class="sec-intro">zkAssess is live today. The rest of the path is built on it.</p>
+    <p class="sec-intro">Every product in the suite is live. Start with the one that fits where you are.</p>
     <div class="hero-ctas" style="justify-content:center;">
-      <a href="zkassess.html" class="btn btn-primary">Explore zkAssess</a>
+      <a href="index.html#products" class="btn btn-primary">Explore Product</a>
       <a href="index.html#cta" class="btn btn-secondary">Talk to Us</a>
     </div>
   </div>
