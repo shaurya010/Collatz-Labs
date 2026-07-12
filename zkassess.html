@@ -54,22 +54,40 @@
     padding:18px 32px; max-width:1180px; margin:0 auto;
   }
   .logo{
-    display:flex; align-items:center; gap:10px;
-    font-family:var(--mono); font-weight:600; font-size:17px; letter-spacing:0.02em;
+    display:flex; align-items:center; gap:9px;
+    font-family:var(--mono); font-weight:700; font-size:18px; letter-spacing:0.02em;
   }
+  .logo .mark{width:20px; height:20px; border:1.5px solid var(--gold); border-radius:3px; flex-shrink:0;
+    background:linear-gradient(45deg, transparent 48%, var(--gold-dim) 48%, var(--gold-dim) 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, var(--gold-dim) 48%, var(--gold-dim) 52%, transparent 52%);}
   .logo .brk{color:var(--gold);}
   .navlinks{display:flex; gap:34px; align-items:center;}
-  .navlinks a{
+  .navlinks > a{
     font-family:var(--mono); font-size:13px; color:var(--text-muted);
     letter-spacing:0.03em; transition:color .15s ease;
   }
-  .navlinks a:hover{color:var(--text);}
+  .navlinks > a:hover{color:var(--text);}
   .nav-cta{
     font-family:var(--mono); font-size:13px; padding:9px 18px;
     border:1px solid var(--gold); color:var(--gold);
     border-radius:2px; transition:all .18s ease;
   }
   .nav-cta:hover{background:var(--gold); color:#0a0d12;}
+
+  .has-dropdown{position:relative;}
+  .nav-drop-trigger{font-family:var(--mono); font-size:13px; color:var(--text-muted); letter-spacing:0.03em; background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:5px; padding:0; transition:color .15s ease;}
+  .nav-drop-trigger:hover, .has-dropdown.open .nav-drop-trigger{color:var(--text);}
+  .nav-drop-trigger .caret{font-size:9px; transition:transform .15s ease;}
+  .has-dropdown.open .nav-drop-trigger .caret{transform:rotate(180deg);}
+  .dropdown{display:none; position:absolute; top:100%; left:50%; transform:translateX(-50%); padding-top:14px; z-index:50;}
+  .has-dropdown.open .dropdown, .has-dropdown:hover .dropdown{display:block;}
+  .dropdown-inner{background:var(--bg-panel); border:1px solid var(--border); border-radius:6px; min-width:280px; padding:8px; box-shadow:0 12px 32px rgba(0,0,0,0.4);}
+  .dropdown-item{display:flex; flex-direction:column; gap:2px; padding:10px 12px; border-radius:4px; transition:background .15s ease;}
+  a.dropdown-item:hover{background:var(--bg-panel-alt);}
+  .dropdown-item strong{font-family:var(--mono); font-size:13.5px; color:var(--text); font-weight:600;}
+  .dropdown-item.disabled strong{color:var(--text-dim);}
+  .dropdown-item .d-desc{font-size:12px; color:var(--text-dim);}
+  .dropdown-item .soon-tag{font-family:var(--mono); font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); border:1px solid var(--border); border-radius:20px; padding:1px 7px; width:fit-content; margin-top:4px;}
+  .dropdown-divider{height:1px; background:var(--border-soft); margin:6px 4px;}
   .navlinks-mobile-toggle{display:none;}
   .breadcrumb{
     font-family:var(--mono); font-size:12px; color:var(--text-dim);
@@ -383,15 +401,24 @@
 <div class="breadcrumb"><a href="index.html">Encrypt</a><span>/</span><span>zkAssess</span></div>
 <header>
   <nav>
-    <div class="logo"><span>zk<span class="brk">Assess</span></span></div>
+    <a href="index.html" class="logo"><span class="mark"></span> ENCRYPT</a>
     <div class="navlinks">
-      <a href="#boundary">Protocol</a>
-      <a href="#detection">Detection Engine</a>
-      <a href="#scoring">Scoring</a>
-      <a href="#privacy">Attestation</a>
-      <a href="#roadmap">Roadmap</a>
+      <div class="has-dropdown" id="productDrop">
+        <button class="nav-drop-trigger" type="button" aria-expanded="false">Product <span class="caret">▾</span></button>
+        <div class="dropdown">
+          <div class="dropdown-inner">
+          <a href="zkassess.html" class="dropdown-item"><strong>zkAssess</strong><span class="d-desc">Quantum-readiness code scanner — live</span></a>
+          <a href="hybrid-pqc.html" class="dropdown-item"><strong>Hybrid Post-Quantum Cryptography</strong><span class="d-desc">Hybrid Post-Quantum Cryptographic Solution — live</span></a>
+          <a href="pure-pqc.html" class="dropdown-item"><strong>Pure Post-Quantum Cryptography</strong><span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span></a>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item disabled"><strong>PRNG / TRNG</strong><span class="d-desc">Pseudo / True Random Number Generator</span><span class="soon-tag">Coming soon</span></div>
+          </div>
+        </div>
+      </div>
+      <a href="why-encrypt.html">Why Encrypt</a>
+      <a href="about.html">About Us</a>
     </div>
-    <a href="#cta" class="nav-cta">Request Access</a>
+    <a href="index.html#cta" class="nav-cta">Talk to Us</a>
   </nav>
 </header>
 
@@ -711,5 +738,11 @@
   </div>
 </footer>
 
+<script>
+  const productDrop = document.getElementById('productDrop');
+  const dropTrigger = productDrop.querySelector('.nav-drop-trigger');
+  dropTrigger.addEventListener('click', (e) => { e.stopPropagation(); const isOpen = productDrop.classList.toggle('open'); dropTrigger.setAttribute('aria-expanded', isOpen); });
+  document.addEventListener('click', () => { productDrop.classList.remove('open'); dropTrigger.setAttribute('aria-expanded', 'false'); });
+</script>
 </body>
 </html>
