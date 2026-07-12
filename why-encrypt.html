@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Why Encrypt — A Real-World Path to Post-Quantum Security</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2032%2032%27%3E%0A%3Crect%20x%3D%271%27%20y%3D%271%27%20width%3D%2730%27%20height%3D%2730%27%20rx%3D%276%27%20fill%3D%27%230a0d12%27%20stroke%3D%27%23f2b84b%27%20stroke-width%3D%272%27/%3E%0A%3Cline%20x1%3D%279%27%20y1%3D%279%27%20x2%3D%2723%27%20y2%3D%2723%27%20stroke%3D%27%23a3823a%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27/%3E%0A%3Cline%20x1%3D%2723%27%20y1%3D%279%27%20x2%3D%279%27%20y2%3D%2723%27%20stroke%3D%27%23a3823a%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27/%3E%0A%3C/svg%3E">
-<meta name="description" content="The post-quantum transition is already underway, not hypothetical. Encrypt follows the same practical path the industry has converged on: analyze with zero-knowledge assessment, then migrate to Hybrid or Pure PQC.">
+<meta name="description" content="The post-quantum transition is already underway, not hypothetical. Encrypt follows the same practical path the industry has converged on: analyze with zero-knowledge assessment, then migrate to Hybrid or Pure Post-Quantum Cryptography.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -186,11 +186,11 @@
             <span class="d-desc">Quantum-readiness code scanner — live</span>
           </a>
           <a href="hybrid-pqc.html" class="dropdown-item">
-            <strong>Hybrid PQC</strong>
+            <strong>Hybrid Post-Quantum Cryptography</strong>
             <span class="d-desc">Hybrid Post-Quantum Cryptographic Solution — live</span>
           </a>
           <a href="pure-pqc.html" class="dropdown-item">
-            <strong>Pure PQC</strong>
+            <strong>Pure Post-Quantum Cryptography</strong>
             <span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span>
           </a>
           <div class="dropdown-divider"></div>
@@ -226,7 +226,7 @@
     <div class="timeline">
       <div class="tl-item">
         <div class="tl-date">August 2024</div>
-        <h4>NIST finalizes the first PQC standards</h4>
+        <h4>NIST finalizes the first Post-Quantum Cryptography standards</h4>
         <p>ML-KEM (FIPS 203), ML-DSA (FIPS 204), and SLH-DSA (FIPS 205) became official, quantum-resistant replacements for RSA, ECDSA, and Diffie-Hellman.</p>
       </div>
       <div class="tl-item">
@@ -292,11 +292,11 @@
       <div class="path-deep-item live">
         <div class="pd-step"><div class="pd-num">02</div><span class="pd-tag live">Live</span></div>
         <div>
-          <h4>Decide — Hybrid PQC or Pure PQC</h4>
+          <h4>Decide — Hybrid Post-Quantum Cryptography or Pure Post-Quantum Cryptography</h4>
           <p>What zkAssess finds, plus your own constraints — legacy clients you can't break, compliance deadlines, risk tolerance — decides which path fits. Most organizations don't choose once; they choose per system.</p>
           <ul class="pd-features">
-            <li><a href="hybrid-pqc.html" style="color:var(--gold);">Hybrid PQC</a>: classical and post-quantum algorithms run together, so both must be broken to compromise a session</li>
-            <li><a href="pure-pqc.html" style="color:var(--gold);">Pure PQC</a>: a full replacement, suited to new systems and regimes like CNSA 2.0 that expect it eventually</li>
+            <li><a href="hybrid-pqc.html" style="color:var(--gold);">Hybrid Post-Quantum Cryptography</a>: classical and post-quantum algorithms run together, so both must be broken to compromise a session</li>
+            <li><a href="pure-pqc.html" style="color:var(--gold);">Pure Post-Quantum Cryptography</a>: a full replacement, suited to new systems and regimes like CNSA 2.0 that expect it eventually</li>
           </ul>
         </div>
       </div>
@@ -317,7 +317,7 @@
           <h4>Test and finalize</h4>
           <p>Validate the replacement against real traffic and workloads — not just a lab environment — and finalize the migration with a documented, auditable trail.</p>
           <ul class="pd-features">
-            <li>Compatibility testing against clients that don't yet support PQC</li>
+            <li>Compatibility testing against clients that don't yet support Post-Quantum Cryptography</li>
             <li>Sign-off against the same compliance profile zkAssess scored against</li>
           </ul>
         </div>
@@ -328,13 +328,13 @@
 
 <section id="hybrid-vs-pure">
   <div class="wrap">
-    <div class="sec-label">Hybrid vs. Pure PQC</div>
+    <div class="sec-label">Hybrid vs. Pure Post-Quantum Cryptography</div>
     <h2>Neither is universally "right." The findings and the constraints decide.</h2>
-    <p class="sec-intro">This is the same choice enterprises deploying PQC today are actually making, not a simplified marketing binary.</p>
+    <p class="sec-intro">This is the same choice enterprises deploying Post-Quantum Cryptography today are actually making, not a simplified marketing binary.</p>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Consideration</th><th>Hybrid PQC</th><th>Pure PQC</th></tr>
+          <tr><th>Consideration</th><th>Hybrid Post-Quantum Cryptography</th><th>Pure Post-Quantum Cryptography</th></tr>
         </thead>
         <tbody>
           <tr>
@@ -344,7 +344,7 @@
           </tr>
           <tr>
             <td>Best fit</td>
-            <td>Public-facing infrastructure and systems that must stay compatible with clients that don't support PQC yet.</td>
+            <td>Public-facing infrastructure and systems that must stay compatible with clients that don't support Post-Quantum Cryptography yet.</td>
             <td>New systems, and regimes such as CNSA 2.0 that plan to require quantum-resistant-only algorithms.</td>
           </tr>
           <tr>
@@ -379,7 +379,7 @@
   <div class="wrap" style="text-align:center;">
     <div class="sec-label" style="text-align:center;">Get Started</div>
     <h2>Start with the inventory. Everything else follows from it.</h2>
-    <p class="sec-intro">Every product on this path — zkAssess, Hybrid PQC, Pure PQC — is live today.</p>
+    <p class="sec-intro">Every product on this path — zkAssess, Hybrid Post-Quantum Cryptography, Pure Post-Quantum Cryptography — is live today.</p>
     <div class="hero-ctas">
       <a href="index.html#products" class="btn btn-primary">Explore Product</a>
       <a href="index.html#cta" class="btn btn-secondary">Talk to Us</a>
@@ -397,8 +397,8 @@
       <div class="footer-col">
         <h5>Product</h5>
         <a href="zkassess.html">zkAssess</a>
-        <a href="hybrid-pqc.html">Hybrid PQC</a>
-        <a href="pure-pqc.html">Pure PQC</a>
+        <a href="hybrid-pqc.html">Hybrid Post-Quantum Cryptography</a>
+        <a href="pure-pqc.html">Pure Post-Quantum Cryptography</a>
         <div>PRNG / TRNG (coming soon)</div>
       </div>
       <div class="footer-col">
