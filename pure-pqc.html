@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pure PQC — Encrypt</title>
+<title>Pure Post-Quantum Cryptography — Encrypt</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2032%2032%27%3E%0A%3Crect%20x%3D%271%27%20y%3D%271%27%20width%3D%2730%27%20height%3D%2730%27%20rx%3D%276%27%20fill%3D%27%230a0d12%27%20stroke%3D%27%23f2b84b%27%20stroke-width%3D%272%27/%3E%0A%3Cline%20x1%3D%279%27%20y1%3D%279%27%20x2%3D%2723%27%20y2%3D%2723%27%20stroke%3D%27%23a3823a%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27/%3E%0A%3Cline%20x1%3D%2723%27%20y1%3D%279%27%20x2%3D%279%27%20y2%3D%2723%27%20stroke%3D%27%23a3823a%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27/%3E%0A%3C/svg%3E">
-<meta name="description" content="Pure PQC fully replaces quantum-vulnerable algorithms with NIST-standardized post-quantum primitives, hardened against side-channel attacks. Encrypt's pure post-quantum cryptographic solution.">
+<meta name="description" content="Pure Post-Quantum Cryptography fully replaces quantum-vulnerable algorithms with NIST-standardized post-quantum primitives, hardened against side-channel attacks. Encrypt's pure post-quantum cryptographic solution.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -128,7 +128,7 @@
 </head>
 <body>
 
-<div class="breadcrumb"><a href="index.html">Encrypt</a><span>/</span><span>Pure PQC</span></div>
+<div class="breadcrumb"><a href="index.html">Encrypt</a><span>/</span><span>Pure Post-Quantum Cryptography</span></div>
 <header>
   <nav>
     <a href="index.html" class="logo"><span class="mark"></span> ENCRYPT</a>
@@ -138,8 +138,8 @@
         <div class="dropdown">
           <div class="dropdown-inner">
           <a href="zkassess.html" class="dropdown-item"><strong>zkAssess</strong><span class="d-desc">Quantum-readiness code scanner — live</span></a>
-          <a href="hybrid-pqc.html" class="dropdown-item"><strong>Hybrid PQC</strong><span class="d-desc">Hybrid Post-Quantum Cryptographic Solution — live</span></a>
-          <a href="pure-pqc.html" class="dropdown-item"><strong>Pure PQC</strong><span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span></a>
+          <a href="hybrid-pqc.html" class="dropdown-item"><strong>Hybrid Post-Quantum Cryptography</strong><span class="d-desc">Hybrid Post-Quantum Cryptographic Solution — live</span></a>
+          <a href="pure-pqc.html" class="dropdown-item"><strong>Pure Post-Quantum Cryptography</strong><span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span></a>
           <div class="dropdown-divider"></div>
           <div class="dropdown-item disabled"><strong>PRNG / TRNG</strong><span class="d-desc">Pseudo / True Random Number Generator</span><span class="soon-tag">Coming soon</span></div>
           </div>
@@ -168,7 +168,7 @@
   <div class="wrap">
     <div class="sec-label">The Algorithm Suite</div>
     <h2>Three standardized primitives. No classical primitive left in the stack.</h2>
-    <p class="sec-intro">Pure PQC replaces every quantum-vulnerable primitive outright, using the algorithms NIST finalized in August 2024 — not a placeholder waiting for a future standard.</p>
+    <p class="sec-intro">Pure Post-Quantum Cryptography replaces every quantum-vulnerable primitive outright, using the algorithms NIST finalized in August 2024 — not a placeholder waiting for a future standard.</p>
     <div class="suite-grid">
       <div class="suite-card"><div class="s-fips">FIPS 203</div><h4>ML-KEM</h4><p>Module-lattice key encapsulation — replaces RSA and ECDH for key exchange and encryption.</p></div>
       <div class="suite-card"><div class="s-fips">FIPS 204</div><h4>ML-DSA</h4><p>Module-lattice digital signatures — replaces RSA and ECDSA/EdDSA for signing and authentication.</p></div>
@@ -202,7 +202,7 @@
   <div class="wrap">
     <div class="sec-label">The Problem Nobody's Algorithm Fixes For You</div>
     <h2>Going pure doesn't remove the side-channel problem. It changes its shape.</h2>
-    <p class="sec-intro">With no classical fallback, Pure PQC's signature and key-exchange operations are the only thing standing between an attacker and your keys — so the physical implementation matters even more than in a hybrid deployment. Signature schemes like ML-DSA carry their own side-channel exposure, distinct from ML-KEM's.</p>
+    <p class="sec-intro">With no classical fallback, Pure Post-Quantum Cryptography's signature and key-exchange operations are the only thing standing between an attacker and your keys — so the physical implementation matters even more than in a hybrid deployment. Signature schemes like ML-DSA carry their own side-channel exposure, distinct from ML-KEM's.</p>
 
     <div class="sca-grid">
       <div class="sca-col problem">
@@ -229,11 +229,11 @@
 <section id="zk-tie-in">
   <div class="wrap">
     <div class="sec-label">Where It Fits</div>
-    <h2>Pure PQC is the destination. Hybrid PQC is often how you get there.</h2>
+    <h2>Pure Post-Quantum Cryptography is the destination. Hybrid Post-Quantum Cryptography is often how you get there.</h2>
     <div class="zk-callout">
       <h3>Matched to your findings, not applied blanket</h3>
-      <p>zkAssess's scan tells you which systems are quantum-vulnerable and which of those have room to go straight to Pure PQC — new services, internal infrastructure you fully control, anything not constrained by clients that lack PQC support yet.</p>
-      <p>Where that constraint exists, Hybrid PQC is the practical bridge — and the same side-channel protections apply either way.</p>
+      <p>zkAssess's scan tells you which systems are quantum-vulnerable and which of those have room to go straight to Pure Post-Quantum Cryptography — new services, internal infrastructure you fully control, anything not constrained by clients that lack Post-Quantum Cryptography support yet.</p>
+      <p>Where that constraint exists, Hybrid Post-Quantum Cryptography is the practical bridge — and the same side-channel protections apply either way.</p>
     </div>
   </div>
 </section>
@@ -242,10 +242,10 @@
   <div class="wrap" style="text-align:center;">
     <div class="sec-label" style="text-align:center;">Get Started</div>
     <h2>Start with the scan. We'll tell you where pure fits.</h2>
-    <p class="sec-intro">See the full suite — zkAssess, Hybrid PQC, and Pure PQC — and start with what fits.</p>
+    <p class="sec-intro">See the full suite — zkAssess, Hybrid Post-Quantum Cryptography, and Pure Post-Quantum Cryptography — and start with what fits.</p>
     <div class="hero-ctas" style="justify-content:center;">
       <a href="index.html#products" class="btn btn-primary">Explore Product</a>
-      <a href="hybrid-pqc.html" class="btn btn-secondary">Compare to Hybrid PQC</a>
+      <a href="hybrid-pqc.html" class="btn btn-secondary">Compare to Hybrid Post-Quantum Cryptography</a>
     </div>
   </div>
 </section>
@@ -260,8 +260,8 @@
       <div class="footer-col">
         <h5>Product</h5>
         <a href="zkassess.html">zkAssess</a>
-        <a href="hybrid-pqc.html">Hybrid PQC</a>
-        <a href="pure-pqc.html">Pure PQC</a>
+        <a href="hybrid-pqc.html">Hybrid Post-Quantum Cryptography</a>
+        <a href="pure-pqc.html">Pure Post-Quantum Cryptography</a>
         <div>PRNG / TRNG (coming soon)</div>
       </div>
       <div class="footer-col">
