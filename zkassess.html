@@ -424,7 +424,7 @@
 <section class="hero">
   <div class="wrap hero-inner">
     <div class="eyebrow">v0.2 · Living Whitepaper · July 2026</div>
-    <h1>Prove your code is<br>quantum-ready.<br><span class="accent">Never show it to anyone.</span></h1>
+    <h1>Check your code is<br>quantum-ready.<br><span class="accent">Without showing it to anyone.</span></h1>
     <p class="hero-sub">zkAssess scans your codebase for quantum-vulnerable and classically weak cryptography, then issues a signed, cryptographically committed attestation. The analysis runs entirely inside your trust boundary — only a redacted score ever leaves it.</p>
     <div class="hero-ctas">
       <a href="#cta" class="btn btn-primary">Request Access</a>
@@ -544,22 +544,22 @@
         <tbody>
           <tr>
             <td><span class="tag tag-quantum">QUANTUM-VULNERABLE</span></td>
-            <td>RSA, ECDSA / ECDH / EdDSA and named curves, Diffie-Hellman, DSA</td>
+            <td>RSA, ECDSA / ECDH / EdDSA and named curves, Diffie-Hellman ...</td>
             <td>Breakable by Shor's algorithm on a sufficiently large quantum computer</td>
           </tr>
           <tr>
             <td><span class="tag tag-weak">CLASSICALLY WEAK</span></td>
-            <td>MD5, SHA-1, DES, 3DES, RC4, RC2</td>
+            <td>MD5, SHA-1, DES, 3DES, RC4, RC2 ...</td>
             <td>Already broken or impractically weak, independent of quantum computing</td>
           </tr>
           <tr>
             <td><span class="tag tag-config">CONFIGURATION</span></td>
-            <td>ECB mode, RSA keys under 2048 bits, static IVs / salts</td>
+            <td>ECB mode, RSA keys under 2048 bits, static IVs / salts ...</td>
             <td>The primitive may be sound but the usage pattern undermines it</td>
           </tr>
           <tr>
             <td><span class="tag tag-safe">QUANTUM-SAFE</span></td>
-            <td>AES-256, ChaCha20-Poly1305, SHA-256/3, BLAKE2/3, ML-KEM, ML-DSA, SLH-DSA, Falcon</td>
+            <td>AES-256, ChaCha20-Poly1305, SHA-256/3, BLAKE2/3, ML-KEM, ML-DSA, SLH-DSA, Falcon ...</td>
             <td>Positive confirmation of already-good cryptographic hygiene</td>
           </tr>
         </tbody>
