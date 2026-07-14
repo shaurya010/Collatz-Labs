@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>zkAssess — Prove Your Code Is Quantum-Ready. Without Showing It.</title>
+<title>zkAssess — Check Your Code Is Quantum-Ready. Without Showing Your Code to Anyone.</title>
 <link rel="icon" type="image/png" href="encrypt-logo.png">
 <meta name="description" content="zkAssess assesses codebases for quantum-vulnerable cryptography and issues a signed, redacted attestation — the source never leaves your trust boundary.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -230,6 +230,7 @@
     letter-spacing:-0.01em; max-width:680px; margin-bottom:18px;
   }
   .sec-intro{color:var(--text-muted); max-width:640px; font-size:16px; margin-bottom:52px;}
+  .sec-intro.gold{color:var(--gold);}
 
   /* two-phase split */
   .split-grid{display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
@@ -334,6 +335,12 @@
   .rm-item h4{font-family:var(--mono); font-size:16px; font-weight:600; margin-bottom:8px;}
   .rm-item p{color:var(--text-muted); font-size:14px; max-width:620px;}
 
+  /* ---------- THE PROBLEM ---------- */
+  .problem-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden; margin-top:8px;}
+  .problem-card{background:var(--bg-panel); padding:26px;}
+  .problem-card h4{font-family:var(--mono); font-size:15px; font-weight:600; margin-bottom:10px; color:var(--gold);}
+  .problem-card p{color:var(--text-muted); font-size:13.5px;}
+
   /* ---------- ZK EMPHASIS ---------- */
   .zk-emphasis{display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); border:1px solid var(--gold-dim); border-radius:6px; overflow:hidden;}
   .zk-emphasis-card{background:var(--bg-panel-alt); padding:36px;}
@@ -423,8 +430,8 @@
 
 <section class="hero">
   <div class="wrap hero-inner">
-    <div class="eyebrow">v0.2 · Living Whitepaper · July 2026</div>
-    <h1>Check your code is<br>quantum-ready.<br><span class="accent">Without showing it to anyone.</span></h1>
+    <div class="eyebrow">V-1.0 · Living Whitepaper · 2026</div>
+    <h1>Check your code is<br>quantum-ready.<br><span class="accent">Without showing your code to anyone.</span></h1>
     <p class="hero-sub">zkAssess scans your codebase for quantum-vulnerable and classically weak cryptography, then issues a signed, cryptographically committed attestation. The analysis runs entirely inside your trust boundary — only a redacted score ever leaves it.</p>
     <div class="hero-ctas">
       <a href="#cta" class="btn btn-primary">Request Access</a>
@@ -457,6 +464,35 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-label">The Problem</div>
+    <h2>Most organizations don't know what cryptography they're running — or where.</h2>
+    <p class="sec-intro">Cryptography accumulates quietly: an old library here, a half-finished migration there, a config file nobody's revisited in years. Ask most security teams for a complete, current picture of every algorithm running across their systems, and the honest answer is that no one fully has one.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h4>Hidden risk, revealed</h4>
+        <p>zkAssess surfaces the quantum-vulnerable and classically weak cryptography that's already running in production — the risk you can't fix because no one's found it yet.</p>
+      </div>
+      <div class="problem-card">
+        <h4>Scattered pieces, one picture</h4>
+        <p>Findings across every repository and service are pulled into a single, reproducible inventory — not a pile of disconnected scan results nobody has time to reconcile.</p>
+      </div>
+      <div class="problem-card">
+        <h4>Guesswork, automated away</h4>
+        <p>Deterministic, versioned pattern matching replaces manual code review and best-guess audits with something any verifier can reproduce.</p>
+      </div>
+      <div class="problem-card">
+        <h4>Continuous, not one-time</h4>
+        <p>Run zkAssess in CI on every commit, and your cryptographic inventory stays current instead of going stale the moment something changes.</p>
+      </div>
+    </div>
+
+    <p class="sec-intro gold" style="font-style:italic; margin-top:36px; margin-bottom:0;">Continuous visibility replaces guesswork with clarity — so you can move toward the post-quantum transition with confidence, not uncertainty.</p>
   </div>
 </section>
 
@@ -544,22 +580,22 @@
         <tbody>
           <tr>
             <td><span class="tag tag-quantum">QUANTUM-VULNERABLE</span></td>
-            <td>RSA, ECDSA / ECDH / EdDSA and named curves, Diffie-Hellman ...</td>
+            <td>RSA, ECDSA / ECDH / EdDSA and named curves, Diffie-Hellman, DSA</td>
             <td>Breakable by Shor's algorithm on a sufficiently large quantum computer</td>
           </tr>
           <tr>
             <td><span class="tag tag-weak">CLASSICALLY WEAK</span></td>
-            <td>MD5, SHA-1, DES, 3DES, RC4, RC2 ...</td>
+            <td>MD5, SHA-1, DES, 3DES, RC4, RC2</td>
             <td>Already broken or impractically weak, independent of quantum computing</td>
           </tr>
           <tr>
             <td><span class="tag tag-config">CONFIGURATION</span></td>
-            <td>ECB mode, RSA keys under 2048 bits, static IVs / salts ...</td>
+            <td>ECB mode, RSA keys under 2048 bits, static IVs / salts</td>
             <td>The primitive may be sound but the usage pattern undermines it</td>
           </tr>
           <tr>
             <td><span class="tag tag-safe">QUANTUM-SAFE</span></td>
-            <td>AES-256, ChaCha20-Poly1305, SHA-256/3, BLAKE2/3, ML-KEM, ML-DSA, SLH-DSA, Falcon ...</td>
+            <td>AES-256, ChaCha20-Poly1305, SHA-256/3, BLAKE2/3, ML-KEM, ML-DSA, SLH-DSA, Falcon</td>
             <td>Positive confirmation of already-good cryptographic hygiene</td>
           </tr>
         </tbody>
@@ -731,7 +767,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 zkAssess. Whitepaper v0.2, July 2026.</span>
+      <span>© 2026 zkAssess. Whitepaper V-1.0, 2026.</span>
       <span>pattern_set_version 2026.07.1</span>
     </div>
   </div>
