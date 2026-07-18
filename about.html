@@ -115,7 +115,7 @@
   /* ---------- MISSION STATEMENT ---------- */
   .mission-statement{font-family:var(--mono); font-size:20px; line-height:1.5; color:var(--text); max-width:700px; margin-bottom:46px; border-left:2px solid var(--gold); padding-left:24px;}
 
-  .path-row{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .path-row{display:grid; grid-template-columns:repeat(2, 1fr); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
   .path-card{background:var(--bg-panel); padding:28px; display:flex; flex-direction:column;}
   .path-card.live{background:var(--bg-panel-alt);}
   .path-tag{font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:20px; display:inline-block; margin-bottom:14px; width:fit-content;}
@@ -179,20 +179,18 @@
             <strong>Pure Post-Quantum Cryptography</strong>
             <span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span>
           </a>
-          <div class="dropdown-item disabled">
-            <strong>Collatz Labs Shield</strong>
-            <span class="d-desc">Managed cryptographic security & monitoring</span>
-            <span class="soon-tag">Coming soon</span>
-          </div>
-          <div class="dropdown-item disabled">
-            <strong>Collatz Labs Advisory</strong>
-            <span class="d-desc">Migration consulting & expert support</span>
-            <span class="soon-tag">Coming soon</span>
-          </div>
+          <a href="entropy-source.html" class="dropdown-item">
+            <strong>Entropy Source</strong>
+            <span class="d-desc">Software Entropy Source for Cryptographic Applications — live</span>
+          </a>
           <div class="dropdown-divider"></div>
+          <a href="prng.html" class="dropdown-item">
+            <strong>PRNG</strong>
+            <span class="d-desc">Collatz-based PRNG — research preview</span>
+          </a>
           <div class="dropdown-item disabled">
-            <strong>PRNG / TRNG</strong>
-            <span class="d-desc">Pseudo / True Random Number Generator</span>
+            <strong>QRNG</strong>
+            <span class="d-desc">Quantum Random Number Generator</span>
             <span class="soon-tag">Coming soon</span>
           </div>
           </div>
@@ -221,12 +219,12 @@
       <div>
         <p>Collatz Labs was founded to answer a simple question: how does an organization prove a fact about its own cryptography to an auditor, customer, or regulator, without handing over the source code, keys, or business logic behind it?</p>
         <p>We don't sell an algorithm — we don't compete with the open-source cryptography your engineers already trust. We orchestrate it. Collatz Labs is the platform enterprises use to discover what cryptography they're actually running, assess the quantum risk in it, plan and execute the migration, and keep managing it afterward — continuously, not as a one-time project.</p>
-        <p>That starts with our flagship product, zkAssess, and extends into the post-quantum migration, managed security, and advisory path it feeds into.</p>
+        <p>That starts with our flagship product, zkAssess, and extends into the post-quantum migration and entropy foundations it feeds into.</p>
       </div>
       <div class="overview-stats">
         <div class="ov-stat"><span class="ov-num">2026</span><span class="ov-lbl">First product shipped</span></div>
         <div class="ov-stat"><span class="ov-num">0</span><span class="ov-lbl">Lines of your source code we ever see</span></div>
-        <div class="ov-stat"><span class="ov-num">6</span><span class="ov-lbl">Products across the quantum-safety path</span></div>
+        <div class="ov-stat"><span class="ov-num">4</span><span class="ov-lbl">Products across the quantum-safety path</span></div>
       </div>
     </div>
   </div>
@@ -311,9 +309,9 @@
         <a href="zkassess.html">zkAssess</a>
         <a href="hybrid-pqc.html">Hybrid Post-Quantum Cryptography</a>
         <a href="pure-pqc.html">Pure Post-Quantum Cryptography</a>
-        <div>Collatz Labs Shield (coming soon)</div>
-        <div>Collatz Labs Advisory (coming soon)</div>
-        <div>PRNG / TRNG (coming soon)</div>
+        <a href="entropy-source.html">Entropy Source</a>
+        <a href="prng.html">PRNG</a>
+        <div>QRNG (coming soon)</div>
       </div>
       <div class="footer-col">
         <h5>Company</h5>
