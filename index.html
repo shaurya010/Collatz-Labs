@@ -170,7 +170,7 @@
 
   /* ---------- WHY COLLATZ LABS: THE PATH ---------- */
   .path-intro{color:var(--gold); max-width:640px; font-size:16px; margin-bottom:52px;}
-  .path-row{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .path-row{display:grid; grid-template-columns:repeat(2, 1fr); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
   .path-card{background:var(--bg-panel); padding:30px; display:flex; flex-direction:column;}
   .path-card.live{background:var(--bg-panel-alt);}
   .path-tag{font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:20px; display:inline-block; margin-bottom:16px; width:fit-content;}
@@ -192,6 +192,7 @@
   .p-status{font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:20px; display:inline-block; margin-bottom:18px; width:fit-content;}
   .p-status.live{color:var(--green); border:1px solid rgba(74,222,156,0.35); background:rgba(74,222,156,0.08);}
   .p-status.dev{color:var(--text-dim); border:1px solid var(--border);}
+  .p-status.research{color:var(--blue); border:1px solid rgba(122,162,247,0.35); background:rgba(122,162,247,0.08);}
   .product-card h3{font-family:var(--mono); font-size:21px; font-weight:600; margin-bottom:12px;}
   .product-card p{color:var(--text-muted); font-size:14px; margin-bottom:22px; flex-grow:1;}
   .product-card .p-link{font-family:var(--mono); font-size:13px; color:var(--gold); display:inline-flex; align-items:center; gap:6px;}
@@ -256,20 +257,18 @@
             <strong>Pure Post-Quantum Cryptography</strong>
             <span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span>
           </a>
-          <div class="dropdown-item disabled">
-            <strong>Collatz Labs Shield</strong>
-            <span class="d-desc">Managed cryptographic security & monitoring</span>
-            <span class="soon-tag">Coming soon</span>
-          </div>
-          <div class="dropdown-item disabled">
-            <strong>Collatz Labs Advisory</strong>
-            <span class="d-desc">Migration consulting & expert support</span>
-            <span class="soon-tag">Coming soon</span>
-          </div>
+          <a href="entropy-source.html" class="dropdown-item">
+            <strong>Entropy Source</strong>
+            <span class="d-desc">Software Entropy Source for Cryptographic Applications — live</span>
+          </a>
           <div class="dropdown-divider"></div>
+          <a href="prng.html" class="dropdown-item">
+            <strong>PRNG</strong>
+            <span class="d-desc">Collatz-based PRNG — research preview</span>
+          </a>
           <div class="dropdown-item disabled">
-            <strong>PRNG / TRNG</strong>
-            <span class="d-desc">Pseudo / True Random Number Generator</span>
+            <strong>QRNG</strong>
+            <span class="d-desc">Quantum Random Number Generator</span>
             <span class="soon-tag">Coming soon</span>
           </div>
           </div>
@@ -401,28 +400,28 @@
         <p>A full replacement of quantum-vulnerable primitives — hardened against side-channel leakage.</p>
         <a href="pure-pqc.html" class="p-link">Explore Pure Post-Quantum Cryptography →</a>
       </div>
-      <div class="product-card">
-        <div class="pillar-tag">Shield</div>
-        <div class="p-status dev">Coming soon</div>
-        <h3>Collatz Labs Shield</h3>
-        <div class="p-tags"><span class="p-tag">managed security</span></div>
-        <p>Managed cryptographic security — policy enforcement, key lifecycle monitoring, and continuous compliance.</p>
-        <a href="#" class="p-link disabled">Coming soon</a>
+      <div class="product-card flagship">
+        <div class="pillar-tag">Foundations</div>
+        <div class="p-status live">Live</div>
+        <h3>Entropy Source</h3>
+        <div class="p-tags"><span class="p-tag">randomness</span></div>
+        <p>A software entropy source engineered toward NIST SP 800-90B conformance and ESV certification — the foundation your crypto's randomness depends on.</p>
+        <a href="entropy-source.html" class="p-link">Explore Entropy Source →</a>
       </div>
       <div class="product-card">
-        <div class="pillar-tag">Advisory</div>
-        <div class="p-status dev">Coming soon</div>
-        <h3>Collatz Labs Advisory</h3>
-        <div class="p-tags"><span class="p-tag">consulting</span></div>
-        <p>Architecture reviews, migration planning, developer training, and premium support from our team.</p>
-        <a href="#" class="p-link disabled">Coming soon</a>
+        <div class="pillar-tag">Foundations</div>
+        <div class="p-status live">Live</div>
+        <h3>PRNG</h3>
+        <div class="p-tags"><span class="p-tag">pseudo-random</span></div>
+        <p>A pseudorandom generator whose security reduces to the conjectured one-wayness of the Collatz function — a research preview, not yet recommended for production.</p>
+        <a href="prng.html" class="p-link">Explore PRNG →</a>
       </div>
       <div class="product-card">
         <div class="pillar-tag">Foundations</div>
         <div class="p-status dev">Coming soon</div>
-        <h3>PRNG / TRNG</h3>
-        <div class="p-tags"><span class="p-tag">randomness</span></div>
-        <p>Pseudo and true random number generation, audited for the entropy your crypto depends on.</p>
+        <h3>QRNG</h3>
+        <div class="p-tags"><span class="p-tag">quantum random</span></div>
+        <p>A quantum random number generator drawing true randomness from quantum-mechanical processes, for the highest assurance levels.</p>
         <a href="#" class="p-link disabled">Coming soon</a>
       </div>
     </div>
@@ -453,9 +452,9 @@
         <a href="zkassess.html">zkAssess</a>
         <a href="hybrid-pqc.html">Hybrid Post-Quantum Cryptography</a>
         <a href="pure-pqc.html">Pure Post-Quantum Cryptography</a>
-        <div>Collatz Labs Shield (coming soon)</div>
-        <div>Collatz Labs Advisory (coming soon)</div>
-        <div>PRNG / TRNG (coming soon)</div>
+        <a href="entropy-source.html">Entropy Source</a>
+        <a href="prng.html">PRNG</a>
+        <div>QRNG (coming soon)</div>
       </div>
       <div class="footer-col">
         <h5>Company</h5>
