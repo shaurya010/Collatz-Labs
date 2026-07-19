@@ -115,8 +115,8 @@
   /* ---------- MISSION STATEMENT ---------- */
   .mission-statement{font-family:var(--mono); font-size:20px; line-height:1.5; color:var(--text); max-width:700px; margin-bottom:46px; border-left:2px solid var(--gold); padding-left:24px;}
 
-  .path-row{display:grid; grid-template-columns:repeat(2, 1fr); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
-  .path-card{background:var(--bg-panel); padding:28px; display:flex; flex-direction:column;}
+  .path-row{display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;}
+  .path-card{background:var(--bg-panel); border:1px solid var(--border); border-radius:6px; padding:28px; display:flex; flex-direction:column;}
   .path-card.live{background:var(--bg-panel-alt);}
   .path-tag{font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:20px; display:inline-block; margin-bottom:14px; width:fit-content;}
   .path-tag.live{color:var(--green); border:1px solid rgba(74,222,156,0.35); background:rgba(74,222,156,0.08);}
@@ -171,13 +171,9 @@
             <strong>zkAssess</strong>
             <span class="d-desc">Quantum-readiness code scanner — live</span>
           </a>
-          <a href="hybrid-pqc.html" class="dropdown-item">
-            <strong>Hybrid Post-Quantum Cryptography</strong>
-            <span class="d-desc">Hybrid Post-Quantum Cryptographic Solution — live</span>
-          </a>
-          <a href="pure-pqc.html" class="dropdown-item">
-            <strong>Pure Post-Quantum Cryptography</strong>
-            <span class="d-desc">Pure Post-Quantum Cryptographic Solution — live</span>
+          <a href="post-quantum-cryptography.html" class="dropdown-item">
+            <strong>Post-Quantum Cryptography</strong>
+            <span class="d-desc">Hybrid &amp; Pure deployment — live</span>
           </a>
           <a href="entropy-source.html" class="dropdown-item">
             <strong>Entropy Source</strong>
@@ -307,8 +303,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <a href="zkassess.html">zkAssess</a>
-        <a href="hybrid-pqc.html">Hybrid Post-Quantum Cryptography</a>
-        <a href="pure-pqc.html">Pure Post-Quantum Cryptography</a>
+        <a href="post-quantum-cryptography.html">Post-Quantum Cryptography</a>
         <a href="entropy-source.html">Entropy Source</a>
         <a href="prng.html">PRNG</a>
         <div>QRNG (coming soon)</div>
