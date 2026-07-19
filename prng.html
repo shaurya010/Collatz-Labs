@@ -127,6 +127,48 @@
   .impl-card .i-row{font-size:12.5px; color:var(--text-muted); display:flex; justify-content:space-between; padding:3px 0;}
   @media (max-width:820px){.impl-grid{grid-template-columns:1fr;}}
 
+  /* open source badge */
+  .oss-badge{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px;
+    color:var(--green); border:1px solid rgba(74,222,156,0.35); background:rgba(74,222,156,0.08);
+    border-radius:20px; padding:5px 12px; margin-bottom:20px;
+  }
+  .oss-download{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+    border:1px solid var(--border); border-radius:6px; padding:22px 26px; background:var(--bg-panel-alt); margin-top:20px;
+  }
+  .oss-download .oss-info h4{font-family:var(--mono); font-size:14.5px; font-weight:600; margin-bottom:4px;}
+  .oss-download .oss-info p{font-size:12.5px; color:var(--text-dim);}
+
+  /* live demo widget */
+  .demo-panel{border:1px solid var(--border); border-radius:6px; background:var(--bg-panel-alt); padding:30px;}
+  .demo-note{
+    font-family:var(--mono); font-size:12.5px; color:var(--green); background:rgba(74,222,156,0.06);
+    border:1px solid rgba(74,222,156,0.3); border-radius:6px; padding:10px 16px; margin-bottom:24px;
+  }
+  .demo-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px; align-items:flex-end;}
+  .demo-field{flex:1; min-width:220px;}
+  .demo-field label{display:block; font-family:var(--mono); font-size:11px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;}
+  .demo-field input{
+    width:100%; background:var(--bg-panel); border:1px solid var(--border); border-radius:4px;
+    padding:10px 12px; color:var(--text); font-family:var(--mono); font-size:13px;
+  }
+  .demo-field input:focus{outline:none; border-color:var(--gold-dim);}
+  .demo-btn-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .demo-btn{
+    font-family:var(--mono); font-size:13px; padding:10px 18px; border-radius:4px; cursor:pointer;
+    border:1px solid var(--border); background:var(--bg-panel); color:var(--text-muted); transition:all .15s ease;
+  }
+  .demo-btn:hover{border-color:var(--gold-dim); color:var(--text);}
+  .demo-btn.primary{background:var(--gold); color:#0a0d12; font-weight:600; border-color:var(--gold);}
+  .demo-btn.primary:hover{background:#ffce6e;}
+  .demo-output{
+    margin-top:20px; background:#05070a; border:1px solid var(--border); border-radius:6px;
+    padding:18px 20px; font-family:var(--mono); font-size:12.5px; color:#9fd8b0; min-height:90px;
+    white-space:pre-wrap; word-break:break-all; max-height:260px; overflow-y:auto;
+  }
+  .demo-status{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); margin-top:10px;}
+
   .final-cta{text-align:center; padding:90px 0;}
   .final-cta h2{margin:0 auto 20px; max-width:600px;}
   .final-cta .sec-intro{margin:0 auto 36px;}
@@ -225,6 +267,37 @@
   </div>
 </section>
 
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-label">Try It Yourself</div>
+    <h2>The exact construction above, running live in your browser.</h2>
+    <p class="sec-intro">This isn't a mockup — it's a JavaScript port of the same C++ reference implementation below: the Collatz OWF, the Goldreich–Levin hardcore bit, and the iterated PRNG, run step for step. Nothing here is sent anywhere; it all runs client-side, in this page.</p>
+
+    <div class="demo-panel">
+      <div class="demo-note">⚠ Research preview — for exploration only, not production use. See the honest caveat further down this page.</div>
+
+      <div class="demo-row">
+        <div class="demo-field">
+          <label>512-bit seed (128 hex chars)</label>
+          <input type="text" id="demoSeed" spellcheck="false" placeholder="Click 'Random Seed' to generate one">
+        </div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-field" style="max-width:180px;">
+          <label>Bytes to generate</label>
+          <input type="number" id="demoBytes" value="32" min="1" max="2048">
+        </div>
+      </div>
+      <div class="demo-btn-row">
+        <button class="demo-btn" id="demoRandomSeed" type="button">Random Seed</button>
+        <button class="demo-btn primary" id="demoGenerate" type="button">Generate</button>
+      </div>
+      <div class="demo-output" id="demoOutput">Output will appear here.</div>
+      <div class="demo-status" id="demoStatus"></div>
+    </div>
+  </div>
+</section>
+
 <section id="results">
   <div class="wrap">
     <div class="sec-label">Empirical Evaluation</div>
@@ -283,8 +356,9 @@
 <section id="implementation">
   <div class="wrap">
     <div class="sec-label">Implementation &amp; Parameters</div>
+    <div class="oss-badge">● Open Source</div>
     <h2>A modular reference implementation, matching each proof step.</h2>
-    <p class="sec-intro">Five C++ modules mirror the construction directly: the Collatz OWF, the Goldreich–Levin hardcore bit, the one-bit PRG, the iterated PRNG, and a CLI driver — each using fixed-width 512-bit arithmetic.</p>
+    <p class="sec-intro">Five C++ modules mirror the construction directly: the Collatz OWF, the Goldreich–Levin hardcore bit, the one-bit PRG, the iterated PRNG, and a CLI driver — each using fixed-width 512-bit arithmetic. The live demo above is a faithful JavaScript port of this same reference code.</p>
 
     <div class="impl-grid">
       <div class="impl-card">
@@ -307,6 +381,14 @@
       </div>
     </div>
     <p style="font-size:12.5px; color:var(--text-dim);">Hardness figures are under the Collatz Branching Hardness Assumption only — see the honest caveat above.</p>
+
+    <div class="oss-download">
+      <div class="oss-info">
+        <h4>collatz-prng-reference.zip</h4>
+        <p>All 5 C++ modules, headers, and CMakeLists.txt — builds with CMake + a C++17 compiler.</p>
+      </div>
+      <a href="collatz-prng-reference.zip" class="btn btn-secondary" download>Download Source →</a>
+    </div>
   </div>
 </section>
 
@@ -361,6 +443,144 @@
   const dropTrigger = productDrop.querySelector('.nav-drop-trigger');
   dropTrigger.addEventListener('click', (e) => { e.stopPropagation(); const isOpen = productDrop.classList.toggle('open'); dropTrigger.setAttribute('aria-expanded', isOpen); });
   document.addEventListener('click', () => { productDrop.classList.remove('open'); dropTrigger.setAttribute('aria-expanded', 'false'); });
+</script>
+
+<script>
+  // ── Collatz PRNG — faithful JS port of the C++ reference implementation ──
+  // Mirrors: collatz_owf.cpp (Module 1), gl_hardcore.cpp (Module 2),
+  // one_bit_prg.cpp (Module 3), prng_stretch.cpp (Module 4).
+  // Native BigInt gives us exact 512-bit arithmetic with no manual limbs.
+
+  const R_ITERS = 256;
+  const MASK256 = (1n << 256n) - 1n;
+
+  // Module 1 — Collatz OWF. C(x) = x/2 if even, (3x+1)/2 if odd (compressed form).
+  function collatzStep(x) {
+    return (x & 1n) === 0n ? (x >> 1n) : ((x * 3n + 1n) >> 1n);
+  }
+
+  function splitHalves512(x) {
+    // Returns [left256, right256] of a 512-bit value.
+    return [(x >> 256n) & MASK256, x & MASK256];
+  }
+
+  function collatzOWF(x) {
+    const [xl, xr] = splitHalves512(x);
+    let cur = x;
+    let path = 0n;
+    for (let i = 0; i < R_ITERS; i++) {
+      if ((cur & 1n) === 1n) path |= (1n << BigInt(i));
+      cur = collatzStep(cur);
+    }
+    const [xl256, xr256] = splitHalves512(cur);
+    return (xl ^ xr ^ xl256 ^ xr256 ^ path) & MASK256; // 256-bit output
+  }
+
+  // Module 2 — Goldreich–Levin hardcore bit. b(x,r) = popcount(x AND r) mod 2.
+  function glHardcoreBit(x, r) {
+    let v = x & r;
+    let parity = 0n;
+    while (v > 0n) { parity ^= (v & 1n); v >>= 1n; }
+    return parity === 1n;
+  }
+
+  function randomBigInt512() {
+    const bytes = new Uint8Array(64);
+    crypto.getRandomValues(bytes);
+    let x = 0n;
+    for (let i = 0; i < 64; i++) x = (x << 8n) | BigInt(bytes[i]);
+    return x;
+  }
+
+  // Module 3 — One-bit PRG. G1(x,r) = (f_Col(x), r, <x,r>).
+  function oneBitPRG(x, r) {
+    return { y: collatzOWF(x), b: glHardcoreBit(x, r) };
+  }
+
+  // Module 4 — Iterated PRNG. Evolves state, collects one bit per step.
+  class CollatzPRNG {
+    constructor(seed512) { this.state = seed512 & ((1n << 512n) - 1n); }
+    step() {
+      const r = randomBigInt512();
+      const { y, b } = oneBitPRG(this.state, r);
+      this.state = y; // nextX(): embed y (256 bits) as the new 512-bit state, upper bits zero
+      return b;
+    }
+    generateBytes(n) {
+      const out = new Uint8Array(n);
+      for (let byte = 0; byte < n; byte++) {
+        let v = 0;
+        for (let bit = 0; bit < 8; bit++) if (this.step()) v |= (1 << bit);
+        out[byte] = v;
+      }
+      return out;
+    }
+  }
+
+  function hexToBigInt(hex) {
+    if (!/^[0-9a-fA-F]{128}$/.test(hex)) return null;
+    return BigInt('0x' + hex);
+  }
+
+  function randomHexSeed() {
+    const bytes = new Uint8Array(64);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function bytesToHexDump(bytes) {
+    let lines = [];
+    for (let i = 0; i < bytes.length; i += 16) {
+      const chunk = bytes.slice(i, i + 16);
+      const offset = i.toString(10).padStart(6, ' ');
+      const hex = Array.from(chunk).map(b => b.toString(16).padStart(2, '0')).join(' ');
+      lines.push(offset + '  ' + hex);
+    }
+    return lines.join('\n');
+  }
+
+  const seedInput = document.getElementById('demoSeed');
+  const bytesInput = document.getElementById('demoBytes');
+  const randomSeedBtn = document.getElementById('demoRandomSeed');
+  const generateBtn = document.getElementById('demoGenerate');
+  const outputEl = document.getElementById('demoOutput');
+  const statusEl = document.getElementById('demoStatus');
+
+  randomSeedBtn.addEventListener('click', () => {
+    seedInput.value = randomHexSeed();
+  });
+
+  generateBtn.addEventListener('click', () => {
+    let hex = seedInput.value.trim();
+    if (!hex) {
+      hex = randomHexSeed();
+      seedInput.value = hex;
+    }
+    const seed = hexToBigInt(hex);
+    if (seed === null) {
+      statusEl.textContent = 'Seed must be exactly 128 hex characters (512 bits).';
+      statusEl.style.color = 'var(--red)';
+      return;
+    }
+    let numBytes = parseInt(bytesInput.value, 10);
+    if (!numBytes || numBytes < 1) numBytes = 32;
+    if (numBytes > 2048) numBytes = 2048;
+
+    statusEl.style.color = 'var(--text-dim)';
+    statusEl.textContent = 'Generating...';
+    outputEl.textContent = '';
+
+    // Let the UI paint the "Generating..." status before the synchronous work runs.
+    setTimeout(() => {
+      const t0 = performance.now();
+      const prng = new CollatzPRNG(seed);
+      const bytes = prng.generateBytes(numBytes);
+      const t1 = performance.now();
+      outputEl.textContent = bytesToHexDump(bytes);
+      statusEl.style.color = 'var(--green)';
+      statusEl.textContent = `${numBytes} bytes generated in ${(t1 - t0).toFixed(1)} ms — entirely in this browser tab, nothing sent anywhere.`;
+    }, 10);
+  });
 </script>
 </body>
 </html>
