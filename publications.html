@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publications — Collatz Labs</title>
+<link rel="icon" type="image/png" href="encrypt-logo.png">
+<meta name="description" content="The technical whitepapers behind every Collatz Labs product — the construction, the security reasoning, and what's proven versus conjectured, in the open.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d12; --bg-panel: #12161d; --bg-panel-alt: #0d1117;
+    --border: #232a35; --border-soft: #1a2029;
+    --text: #e9edf2; --text-muted: #8a94a3; --text-dim: #5b6472;
+    --gold: #f2b84b; --gold-dim: #a3823a; --green: #4ade9c; --red: #e8664f; --blue: #7aa2f7;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace; --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  ::selection{background:var(--gold); color:#0a0d12;}
+
+  header{position:sticky; top:0; z-index:100; background:rgba(10,13,18,0.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--border-soft);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px; margin:0 auto;}
+  .logo{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-weight:700; font-size:18px; letter-spacing:0.02em;}
+  .logo-mark-img{width:26px; height:26px; flex-shrink:0; border-radius:6px; background:#fff; padding:2px;}
+  .navlinks{display:flex; gap:34px; align-items:center;}
+  .navlinks > a{font-family:var(--mono); font-size:13px; color:var(--text-muted); letter-spacing:0.03em; transition:color .15s ease;}
+  .navlinks > a:hover, .navlinks > a.active{color:var(--text);}
+  .nav-cta{font-family:var(--mono); font-size:13px; padding:9px 18px; border:1px solid var(--gold); color:var(--gold); border-radius:2px; transition:all .18s ease;}
+  .nav-cta:hover{background:var(--gold); color:#0a0d12;}
+  @media (max-width:820px){.navlinks{display:none;}}
+
+  .has-dropdown{position:relative;}
+  .nav-drop-trigger{font-family:var(--mono); font-size:13px; color:var(--text-muted); letter-spacing:0.03em; background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:5px; padding:0; transition:color .15s ease;}
+  .nav-drop-trigger:hover, .has-dropdown.open .nav-drop-trigger{color:var(--text);}
+  .nav-drop-trigger .caret{font-size:9px; transition:transform .15s ease;}
+  .has-dropdown.open .nav-drop-trigger .caret{transform:rotate(180deg);}
+  .dropdown{display:none; position:absolute; top:100%; left:50%; transform:translateX(-50%); padding-top:14px; z-index:50;}
+  .has-dropdown.open .dropdown, .has-dropdown:hover .dropdown{display:block;}
+  .dropdown-inner{background:var(--bg-panel); border:1px solid var(--border); border-radius:6px; min-width:280px; padding:8px; box-shadow:0 12px 32px rgba(0,0,0,0.4);}
+  .dropdown-item{display:flex; flex-direction:column; gap:2px; padding:10px 12px; border-radius:4px; transition:background .15s ease;}
+  a.dropdown-item:hover{background:var(--bg-panel-alt);}
+  .dropdown-item strong{font-family:var(--mono); font-size:13.5px; color:var(--text); font-weight:600;}
+  .dropdown-item.disabled strong{color:var(--text-dim);}
+  .dropdown-item .d-desc{font-size:12px; color:var(--text-dim);}
+  .dropdown-item .soon-tag{font-family:var(--mono); font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); border:1px solid var(--border); border-radius:20px; padding:1px 7px; width:fit-content; margin-top:4px;}
+  .dropdown-divider{height:1px; background:var(--border-soft); margin:6px 4px;}
+
+  .page-hero{padding:80px 0 60px; border-bottom:1px solid var(--border-soft); position:relative;}
+  .page-hero::before{content:""; position:absolute; inset:0; background-image:linear-gradient(var(--border-soft) 1px, transparent 1px), linear-gradient(90deg, var(--border-soft) 1px, transparent 1px); background-size:64px 64px; opacity:0.3; mask-image:linear-gradient(to bottom, black, transparent 85%); pointer-events:none;}
+  .page-hero-inner{position:relative; z-index:1; max-width:720px;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:0.12em; color:var(--gold); text-transform:uppercase; border:1px solid var(--gold-dim); padding:6px 12px; border-radius:2px; margin-bottom:26px;}
+  .eyebrow::before{content:"●"; font-size:8px; animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  h1{font-family:var(--mono); font-weight:700; font-size:clamp(30px, 4.6vw, 48px); line-height:1.12; letter-spacing:-0.01em; margin-bottom:20px;}
+  h1 .accent{color:var(--gold);}
+  .page-hero-sub{font-size:17px; color:var(--text-muted); max-width:620px;}
+
+  section{padding:76px 0; border-bottom:1px solid var(--border-soft);}
+  .sec-label{font-family:var(--mono); font-size:12px; letter-spacing:0.12em; color:var(--gold); text-transform:uppercase; margin-bottom:14px;}
+  h2{font-family:var(--mono); font-weight:600; font-size:clamp(22px,3vw,32px); letter-spacing:-0.01em; max-width:700px; margin-bottom:18px;}
+  .sec-intro{color:var(--text-muted); max-width:660px; font-size:16px; margin-bottom:44px;}
+
+  /* ---------- PUBLICATIONS LIST ---------- */
+  .pub-list{display:flex; flex-direction:column; gap:16px;}
+  .pub-card{
+    border:1px solid var(--border); border-radius:6px; padding:32px 36px;
+    background:var(--bg-panel-alt); transition:border-color .18s ease;
+  }
+  .pub-card:hover{border-color:var(--gold-dim);}
+  .pub-meta{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
+  .pub-status{font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:20px;}
+  .pub-status.live{color:var(--green); border:1px solid rgba(74,222,156,0.35); background:rgba(74,222,156,0.08);}
+  .pub-status.research{color:var(--blue); border:1px solid rgba(122,162,247,0.35); background:rgba(122,162,247,0.08);}
+  .pub-date{font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+  .pub-card h3{font-family:var(--mono); font-size:19px; font-weight:600; line-height:1.4; margin-bottom:12px;}
+  .pub-authors{font-family:var(--mono); font-size:12.5px; color:var(--text-dim); margin-bottom:16px;}
+  .pub-authors .aff{color:var(--text-dim);}
+  .pub-card p{color:var(--text-muted); font-size:14.5px; margin-bottom:18px;}
+  .pub-tags{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px;}
+  .pub-tag{font-family:var(--mono); font-size:10.5px; color:var(--text-dim); border:1px solid var(--border-soft); border-radius:2px; padding:2px 8px;}
+  .pub-links{display:flex; gap:24px; flex-wrap:wrap;}
+  .pub-links a{font-family:var(--mono); font-size:13px; color:var(--gold);}
+  .pub-links a:hover{text-decoration:underline;}
+
+  .final-cta{text-align:center; padding:90px 0;}
+  .final-cta h2{margin:0 auto 20px; max-width:600px;}
+  .final-cta .sec-intro{margin:0 auto 36px;}
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; justify-content:center;}
+  .btn{font-family:var(--mono); font-size:14px; padding:14px 26px; border-radius:2px; display:inline-block; transition:all .18s ease; border:1px solid transparent;}
+  .btn-primary{background:var(--gold); color:#0a0d12; font-weight:600;}
+  .btn-primary:hover{background:#ffce6e;}
+  .btn-secondary{border-color:var(--border); color:var(--text);}
+  .btn-secondary:hover{border-color:var(--text-muted);}
+
+  footer{padding:56px 0 40px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; margin-bottom:40px;}
+  .footer-brand .logo{margin-bottom:14px;}
+  .footer-brand p{color:var(--text-dim); font-size:13.5px; max-width:320px;}
+  .footer-col h5{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:14px;}
+  .footer-col a, .footer-col div{display:block; font-size:13.5px; color:var(--text-muted); padding:4px 0;}
+  .footer-col a:hover{color:var(--text);}
+  .footer-bottom{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:24px; border-top:1px solid var(--border-soft); font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+
+  @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo"><img src="encrypt-logo.png" class="logo-mark-img" alt="Collatz Labs logo"> COLLATZ LABS</a>
+    <div class="navlinks">
+      <div class="has-dropdown" id="productDrop">
+        <button class="nav-drop-trigger" type="button" aria-expanded="false">Product <span class="caret">▾</span></button>
+        <div class="dropdown">
+          <div class="dropdown-inner">
+          <a href="zkassess.html" class="dropdown-item">
+            <strong>zkAssess</strong>
+            <span class="d-desc">Quantum-readiness code scanner — live</span>
+          </a>
+          <a href="post-quantum-cryptography.html" class="dropdown-item">
+            <strong>Post-Quantum Cryptography</strong>
+            <span class="d-desc">Hybrid &amp; Pure deployment — live</span>
+          </a>
+          <a href="entropy-source.html" class="dropdown-item">
+            <strong>Entropy Source</strong>
+            <span class="d-desc">Software Entropy Source for Cryptographic Applications — live</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="prng.html" class="dropdown-item">
+            <strong>Open Source Pseudorandom Number Generator</strong>
+            <span class="d-desc">Collatz-based Pseudorandom Number Generator — research preview</span>
+          </a>
+          <div class="dropdown-item disabled">
+            <strong>Quantum Random Number Generator</strong>
+            <span class="d-desc">Quantum Random Number Generator</span>
+            <span class="soon-tag">Coming soon</span>
+          </div>
+          </div>
+        </div>
+      </div>
+      <a href="why-encrypt.html">Why Collatz Labs</a>
+      <a href="publications.html" class="active">Publications</a>
+      <a href="about.html">About Us</a>
+    </div>
+    <a href="index.html#cta" class="nav-cta">Talk to Us</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap page-hero-inner">
+    <div class="eyebrow">Publications</div>
+    <h1>The whitepapers behind <span class="accent">every product.</span></h1>
+    <p class="page-hero-sub">Every product on this site ships with the technical paper it's built from — the construction, the security reasoning, and the parts we haven't proven yet, published in the open rather than kept behind a certificate number.</p>
+  </div>
+</section>
+
+<section id="list">
+  <div class="wrap">
+    <div class="pub-list">
+
+      <div class="pub-card">
+        <div class="pub-meta">
+          <span class="pub-status live">Live</span>
+          <span class="pub-date">Version 1 · July 2026</span>
+        </div>
+        <h3>zkAssess: A Zero-Knowledge-Inspired Protocol for Privacy-Preserving Code Security and Quantum-Readiness Assessment</h3>
+        <div class="pub-authors">Collatz Labs</div>
+        <p>Describes a protocol that splits code security assessment into a full-visibility analysis phase, kept inside the repository owner's trust boundary, and a narrow, provable attestation phase built on Merkle commitments — the design behind zkAssess.</p>
+        <div class="pub-tags">
+          <span class="pub-tag">zero-knowledge</span>
+          <span class="pub-tag">Merkle proofs</span>
+          <span class="pub-tag">quantum-readiness scoring</span>
+        </div>
+        <div class="pub-links">
+          <a href="zkassess.html">Read on the product page →</a>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-meta">
+          <span class="pub-status live">Live</span>
+          <span class="pub-date">Technical Whitepaper · July 17, 2026</span>
+        </div>
+        <h3>A Software Entropy Source for Cryptographic Applications: Design, Prototype Results, and a Roadmap to NIST SP 800-90B / ESV Certification</h3>
+        <div class="pub-authors">Collatz Labs</div>
+        <p>A timing-jitter noise source with continuous health tests implemented per SP 800-90B §4.4, preliminary entropy measurements from a 200,000-sample prototype run, and the full engineering and regulatory path to an issued ESV certificate.</p>
+        <div class="pub-tags">
+          <span class="pub-tag">SP 800-90B</span>
+          <span class="pub-tag">ESV certification</span>
+          <span class="pub-tag">timing-jitter noise source</span>
+        </div>
+        <div class="pub-links">
+          <a href="entropy-source.html">Read on the product page →</a>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-meta">
+          <span class="pub-status research">Research Preview</span>
+          <span class="pub-date">July 2026</span>
+        </div>
+        <h3>A Pseudorandom Number Generator from the Collatz One-Way Function, Under the Collatz Branching Hardness Assumption</h3>
+        <div class="pub-authors">Shaurya Pratap Singh <span class="aff">— Department of Computer Science and Automation, Indian Institute of Science, Bengaluru</span></div>
+        <p>Constructs a PRNG whose security reduces entirely to the conjectured one-wayness of the Collatz function, via the HILL framework and a Goldreich–Levin hardcore bit — with a complete security proof under the stated assumption, an open-source C++ reference implementation, and an explicit discussion of the gap between the assumption and a formal proof.</p>
+        <div class="pub-tags">
+          <span class="pub-tag">HILL framework</span>
+          <span class="pub-tag">Goldreich–Levin hardcore bit</span>
+          <span class="pub-tag">open source</span>
+          <span class="pub-tag">conjectured hardness</span>
+        </div>
+        <div class="pub-links">
+          <a href="prng.html">Read on the product page →</a>
+          <a href="prng.html#demo">Try the live demo →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="final-cta" id="cta">
+  <div class="wrap" style="text-align:center;">
+    <div class="sec-label" style="text-align:center;">Get Started</div>
+    <h2>Read the paper. Then try the product.</h2>
+    <p class="sec-intro">Every construction here is backed by a paper you can actually read — not just a claim.</p>
+    <div class="hero-ctas">
+      <a href="index.html#products" class="btn btn-primary">Explore Product</a>
+      <a href="index.html#cta" class="btn btn-secondary">Talk to Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="encrypt-logo.png" class="logo-mark-img" alt="Collatz Labs logo"> COLLATZ LABS</div>
+        <p>Business-adaptive cryptographic solutions that protect your systems from quantum threats.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Product</h5>
+        <a href="zkassess.html">zkAssess</a>
+        <a href="post-quantum-cryptography.html">Post-Quantum Cryptography</a>
+        <a href="entropy-source.html">Entropy Source</a>
+        <a href="prng.html">Open Source Pseudorandom Number Generator</a>
+        <div>Quantum Random Number Generator (coming soon)</div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="why-encrypt.html">Why Collatz Labs</a>
+        <a href="publications.html">Publications</a>
+        <a href="about.html">About Us</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <div>contact@collatzlabs.dev</div>
+        <a href="#">Request a briefing</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Collatz Labs. All products built on the same trust-boundary protocol.</span>
+      <span>3 publications, 3 live products</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const productDrop = document.getElementById('productDrop');
+  const dropTrigger = productDrop.querySelector('.nav-drop-trigger');
+  dropTrigger.addEventListener('click', (e) => { e.stopPropagation(); const isOpen = productDrop.classList.toggle('open'); dropTrigger.setAttribute('aria-expanded', isOpen); });
+  document.addEventListener('click', () => { productDrop.classList.remove('open'); dropTrigger.setAttribute('aria-expanded', 'false'); });
+</script>
+</body>
+</html>
