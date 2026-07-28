@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entropy Tester — Operational NIST SP 800-90B Entropy Testing | Collatz Labs</title>
+<link rel="icon" type="image/png" href="encrypt-logo.png">
+<meta name="description" content="Continuous NIST SP 800-90B entropy assessment for your server fleet — IID and non-IID tracks, all ten min-entropy estimators, online health tests, and restart testing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d12; --bg-panel: #12161d; --bg-panel-alt: #0d1117;
+    --border: #232a35; --border-soft: #1a2029;
+    --text: #e9edf2; --text-muted: #8a94a3; --text-dim: #5b6472;
+    --gold: #f2b84b; --gold-dim: #a3823a; --green: #4ade9c; --red: #e8664f; --blue: #7aa2f7;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace; --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  ::selection{background:var(--gold); color:#0a0d12;}
+
+  header{position:sticky; top:0; z-index:100; background:rgba(10,13,18,0.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--border-soft);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px; margin:0 auto;}
+  .logo{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-weight:700; font-size:18px; letter-spacing:0.02em;}
+  .logo-mark-img{width:26px; height:26px; flex-shrink:0; border-radius:6px; background:#fff; padding:2px;}
+  .navlinks{display:flex; gap:34px; align-items:center;}
+  .navlinks > a{font-family:var(--mono); font-size:13px; color:var(--text-muted); letter-spacing:0.03em; transition:color .15s ease;}
+  .navlinks > a:hover, .navlinks > a.active{color:var(--text);}
+  .nav-cta{font-family:var(--mono); font-size:13px; padding:9px 18px; border:1px solid var(--gold); color:var(--gold); border-radius:2px; transition:all .18s ease;}
+  .nav-cta:hover{background:var(--gold); color:#0a0d12;}
+  @media (max-width:820px){.navlinks{display:none;}}
+
+  .has-dropdown{position:relative;}
+  .nav-drop-trigger{font-family:var(--mono); font-size:13px; color:var(--text-muted); letter-spacing:0.03em; background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:5px; padding:0; transition:color .15s ease;}
+  .nav-drop-trigger:hover, .has-dropdown.open .nav-drop-trigger{color:var(--text);}
+  .nav-drop-trigger .caret{font-size:9px; transition:transform .15s ease;}
+  .has-dropdown.open .nav-drop-trigger .caret{transform:rotate(180deg);}
+  .dropdown{display:none; position:absolute; top:100%; left:50%; transform:translateX(-50%); padding-top:14px; z-index:50;}
+  .has-dropdown.open .dropdown, .has-dropdown:hover .dropdown{display:block;}
+  .dropdown-inner{background:var(--bg-panel); border:1px solid var(--border); border-radius:6px; min-width:280px; padding:8px; box-shadow:0 12px 32px rgba(0,0,0,0.4);}
+  .dropdown-item{display:flex; flex-direction:column; gap:2px; padding:10px 12px; border-radius:4px; transition:background .15s ease;}
+  a.dropdown-item:hover{background:var(--bg-panel-alt);}
+  .dropdown-item strong{font-family:var(--mono); font-size:13.5px; color:var(--text); font-weight:600;}
+  .dropdown-item.disabled strong{color:var(--text-dim);}
+  .dropdown-item .d-desc{font-size:12px; color:var(--text-dim);}
+  .dropdown-item .soon-tag{font-family:var(--mono); font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); border:1px solid var(--border); border-radius:20px; padding:1px 7px; width:fit-content; margin-top:4px;}
+  .dropdown-divider{height:1px; background:var(--border-soft); margin:6px 4px;}
+
+  .breadcrumb{font-family:var(--mono); font-size:12px; color:var(--text-dim); padding:9px 32px; border-bottom:1px solid var(--border-soft); background:var(--bg-panel-alt); display:flex; justify-content:center; gap:6px;}
+  .breadcrumb a{color:var(--gold);} .breadcrumb a:hover{text-decoration:underline;}
+
+  .hero{padding:80px 0 56px; border-bottom:1px solid var(--border-soft); position:relative;}
+  .hero::before{content:""; position:absolute; inset:0; background-image:linear-gradient(var(--border-soft) 1px, transparent 1px), linear-gradient(90deg, var(--border-soft) 1px, transparent 1px); background-size:64px 64px; opacity:0.3; mask-image:linear-gradient(to bottom, black, transparent 85%); pointer-events:none;}
+  .hero-inner{position:relative; z-index:1; max-width:780px;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:0.12em; color:var(--gold); text-transform:uppercase; border:1px solid var(--gold-dim); padding:6px 12px; border-radius:2px; margin-bottom:26px;}
+  .eyebrow::before{content:"●"; font-size:8px; animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  h1{font-family:var(--mono); font-weight:700; font-size:clamp(30px, 4.6vw, 46px); line-height:1.14; letter-spacing:-0.01em; margin-bottom:20px;}
+  h1 .accent{color:var(--gold);}
+  .hero-sub{font-size:17px; color:var(--gold); max-width:640px; margin-bottom:36px;}
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{font-family:var(--mono); font-size:14px; padding:14px 26px; border-radius:2px; display:inline-block; transition:all .18s ease; border:1px solid transparent;}
+  .btn-primary{background:var(--gold); color:#0a0d12; font-weight:600;}
+  .btn-primary:hover{background:#ffce6e;}
+  .btn-secondary{border-color:var(--border); color:var(--text);}
+  .btn-secondary:hover{border-color:var(--text-muted);}
+
+  section{padding:76px 0; border-bottom:1px solid var(--border-soft);}
+  .sec-label{font-family:var(--mono); font-size:12px; letter-spacing:0.12em; color:var(--gold); text-transform:uppercase; margin-bottom:14px;}
+  h2{font-family:var(--mono); font-weight:600; font-size:clamp(22px,3vw,32px); letter-spacing:-0.01em; max-width:720px; margin-bottom:18px;}
+  .sec-intro{color:var(--text-muted); max-width:660px; font-size:16px; margin-bottom:44px;}
+  .sec-intro.gold{color:var(--gold);}
+
+  /* two-stage pipeline */
+  .stage-row{display:flex; flex-direction:column; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .stage-card{background:var(--bg-panel); padding:26px 30px; display:grid; grid-template-columns:140px 1fr; gap:24px;}
+  .stage-card .st-name{font-family:var(--mono); font-size:14px; font-weight:700; color:var(--gold);}
+  .stage-card p{color:var(--text-muted); font-size:14px;}
+  @media (max-width:640px){.stage-card{grid-template-columns:1fr; gap:8px;}}
+
+  /* formula box */
+  .formula-box{font-family:var(--mono); background:var(--bg-panel-alt); border:1px solid var(--border); border-radius:6px; padding:24px 28px; margin:20px 0; overflow-x:auto;}
+  .formula-box .f-main{font-size:15px; color:var(--text); line-height:1.8;}
+  .formula-box .f-note{font-size:12px; color:var(--text-dim); margin-top:10px;}
+
+  /* IID method steps */
+  .steps-list{border:1px solid var(--border); border-radius:6px; overflow:hidden; background:var(--bg-panel-alt);}
+  .step-item{padding:16px 22px; border-bottom:1px solid var(--border-soft); display:flex; gap:16px;}
+  .step-item:last-child{border-bottom:none;}
+  .step-item .st-num{font-family:var(--mono); font-size:13px; color:var(--gold); flex-shrink:0;}
+  .step-item p{color:var(--text-muted); font-size:14px;}
+
+  /* statistics table */
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  thead th{text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); padding:12px 16px; border-bottom:1px solid var(--border);}
+  tbody td{padding:13px 16px; border-bottom:1px solid var(--border-soft); color:var(--text-muted); vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody td:first-child{color:var(--text); font-family:var(--mono); font-weight:500;}
+  .table-wrap{border:1px solid var(--border); border-radius:6px; overflow-x:auto; background:var(--bg-panel-alt); margin-bottom:24px;}
+
+  /* defect-found callout */
+  .fix-callout{border:1px solid rgba(74,222,156,0.35); border-radius:6px; padding:28px; background:rgba(74,222,156,0.04); margin-top:24px;}
+  .fix-callout h4{font-family:var(--mono); font-size:15px; font-weight:600; color:var(--green); margin-bottom:12px;}
+  .fix-callout p{color:var(--text-muted); font-size:14px; margin-bottom:10px;}
+  .fix-callout p:last-child{margin-bottom:0;}
+
+  /* validation stats */
+  .val-row{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .val-card{background:var(--bg-panel); border:1px solid var(--border); border-radius:6px; padding:26px;}
+  .val-card .v-num{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--gold); margin-bottom:8px;}
+  .val-card p{color:var(--text-muted); font-size:13.5px;}
+  @media (max-width:720px){.val-row{grid-template-columns:1fr;}}
+
+  /* honest limitations */
+  .honest-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  .honest-col h4{font-family:var(--mono); font-size:13px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:18px;}
+  .honest-col ul{list-style:none;}
+  .honest-col li{font-size:14px; color:var(--text-muted); padding:10px 0; border-bottom:1px solid var(--border-soft);}
+  .honest-col li:last-child{border-bottom:none;}
+  .honest-col li strong{color:var(--text); font-weight:600; display:block; margin-bottom:3px;}
+  @media (max-width:720px){.honest-grid{grid-template-columns:1fr;}}
+
+  /* positioning callout */
+  .position-callout{border:1px dashed var(--gold-dim); border-radius:6px; padding:32px; background:rgba(242,184,75,0.03);}
+  .position-callout h3{font-family:var(--mono); font-size:18px; font-weight:600; margin-bottom:12px;}
+  .position-callout p{color:var(--text-muted); font-size:14.5px; margin-bottom:10px;}
+  .position-callout p:last-child{margin-bottom:0;}
+  .position-callout strong{color:var(--gold);}
+
+  .final-cta{text-align:center; padding:90px 0;}
+  .final-cta h2{margin:0 auto 20px; max-width:600px;}
+  .final-cta .sec-intro{margin:0 auto 36px;}
+  .final-cta .hero-ctas{justify-content:center;}
+
+  footer{padding:56px 0 40px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; margin-bottom:40px;}
+  .footer-brand .logo{margin-bottom:14px;}
+  .footer-brand p{color:var(--text-dim); font-size:13.5px; max-width:320px;}
+  .footer-col h5{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:14px;}
+  .footer-col a, .footer-col div{display:block; font-size:13.5px; color:var(--text-muted); padding:4px 0;}
+  .footer-col a:hover{color:var(--text);}
+  .footer-bottom{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:24px; border-top:1px solid var(--border-soft); font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+
+  @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
+</style>
+</head>
+<body>
+
+<div class="breadcrumb"><a href="index.html">Collatz Labs</a><span>/</span><span>Entropy Tester</span></div>
+<header>
+  <nav>
+    <a href="index.html" class="logo"><img src="encrypt-logo.png" class="logo-mark-img" alt="Collatz Labs logo"> COLLATZ LABS</a>
+    <div class="navlinks">
+      <div class="has-dropdown" id="productDrop">
+        <button class="nav-drop-trigger" type="button" aria-expanded="false">Product <span class="caret">▾</span></button>
+        <div class="dropdown">
+          <div class="dropdown-inner">
+          <a href="zkassess.html" class="dropdown-item"><strong>zkAssess</strong><span class="d-desc">Quantum-readiness code scanner — live</span></a>
+          <a href="post-quantum-cryptography.html" class="dropdown-item"><strong>Post-Quantum Cryptography</strong><span class="d-desc">Hybrid &amp; Pure deployment — live</span></a>
+          <a href="entropy-source.html" class="dropdown-item"><strong>Entropy Source</strong><span class="d-desc">Software Entropy Source for Cryptographic Applications — live</span></a>
+          <a href="entropy-tester.html" class="dropdown-item"><strong>Entropy Tester</strong><span class="d-desc">SP 800-90B fleet entropy monitoring — live</span></a>
+          <div class="dropdown-divider"></div>
+          <a href="prng.html" class="dropdown-item"><strong>Open Source Pseudorandom Number Generator</strong><span class="d-desc">Collatz-based Pseudorandom Number Generator — research preview</span></a>
+          <div class="dropdown-item disabled"><strong>Quantum Random Number Generator</strong><span class="d-desc">Quantum Random Number Generator</span><span class="soon-tag">Coming soon</span></div>
+          </div>
+        </div>
+      </div>
+      <a href="why-encrypt.html">Why Collatz Labs</a>
+      <a href="publications.html">Publications</a>
+      <a href="about.html">About Us</a>
+    </div>
+    <a href="index.html#cta" class="nav-cta">Talk to Us</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Live · Entropy Tester</div>
+    <h1>Don't just build a good entropy source. <span class="accent">Keep checking it.</span></h1>
+    <p class="hero-sub">Entropy Tester runs the statistical tests NIST SP 800-90B specifies — continuously, across your entire server fleet — so a source that was valid at certification time doesn't quietly degrade afterward. Each host runs the assessment against a live sample, signs the result, and ships it to a central dashboard.</p>
+    <div class="hero-ctas">
+      <a href="index.html#cta" class="btn btn-primary">Talk to Us</a>
+      <a href="#validation" class="btn btn-secondary">See the Validation Results ↓</a>
+    </div>
+  </div>
+</section>
+
+<section id="structure">
+  <div class="wrap">
+    <div class="sec-label">How SP 800-90B Evaluates a Source</div>
+    <h2>Two stages: pick the right analytical track, then estimate and continuously verify.</h2>
+    <p class="sec-intro">Min-entropy — not Shannon entropy — is the metric that matters cryptographically, because it bounds an adversary's best case for guessing the single most likely output: H<sub>∞</sub>(X) = −log<sub>2</sub>(max<sub>x</sub> Pr[X=x]).</p>
+
+    <div class="stage-row">
+      <div class="stage-card">
+        <div class="st-name">Stage 1</div>
+        <p>A large sample is run through the IID permutation test. If reordering the sample doesn't change how its test statistics behave, the source is treated as independent and identically distributed, and a single simple estimator suffices. If any statistic shows the original ordering to be a significant outlier, the source is treated as non-IID, and a much larger battery of ten min-entropy estimators is applied instead — since a non-IID source could be weak in any of several unrelated ways.</p>
+      </div>
+      <div class="stage-card">
+        <div class="st-name">Stage 2</div>
+        <p>Min-entropy is estimated for whichever track applies, then validated operationally with two online health tests that run continuously against live output, and optionally a restart test that checks the estimate isn't an artifact of one long run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="health-tests">
+  <div class="wrap">
+    <div class="sec-label">Section 4.4 · Online Health Tests</div>
+    <h2>Catching a catastrophic failure in a source that was already validated.</h2>
+    <p class="sec-intro">These two tests run continuously against live output — not once, offline — designed to catch a source that's become stuck, biased, or otherwise degraded after certification.</p>
+
+    <div class="formula-box">
+      <div class="f-main">Repetition Count Test cutoff: &nbsp; C = 1 + ⌈ −log<sub>2</sub>(α) / H ⌉</div>
+      <div class="f-note">Tracks the length of the current run of identical values; a run reaching C is treated as evidence of failure. Implemented exactly as specified.</div>
+    </div>
+    <div class="formula-box">
+      <div class="f-main">Adaptive Proportion Test cutoff: &nbsp; smallest C such that Pr[count ≤ C] ≥ 1 − α, &nbsp; p = 2<sup>−H</sup></div>
+      <div class="f-note">Unlike RCT, the spec gives no closed form — the original codebase approximated the cutoff as a fixed ~0.5×window size, independent of the assumed entropy H. This implementation replaces that with the actual binomial-tail computation via a numerically stable recurrence, so the cutoff correctly tightens as H increases and loosens as H decreases.</div>
+    </div>
+  </div>
+</section>
+
+<section id="iid">
+  <div class="wrap">
+    <div class="sec-label">Section 5.1 · The IID Permutation Test</div>
+    <h2>Does the order of this sample carry information — or would any shuffle look just as plausible?</h2>
+    <p class="sec-intro">If reordering doesn't change how a statistic behaves, the source's structure — if any — isn't order-dependent, which is consistent with IID sampling.</p>
+
+    <div class="steps-list">
+      <div class="step-item"><span class="st-num">01</span><p>Compute T₀ = T(original sample) for each test statistic.</p></div>
+      <div class="step-item"><span class="st-num">02</span><p>Generate N independent random shuffles and compute Tᵢ for each.</p></div>
+      <div class="step-item"><span class="st-num">03</span><p>Count how many shuffled values fall above and below the original.</p></div>
+      <div class="step-item"><span class="st-num">04</span><p>Reject IID for that statistic if the original sits in either extreme tail of the shuffled distribution. The source is judged IID only if every tested statistic passes.</p></div>
+    </div>
+
+    <div style="height:32px"></div>
+
+    <p class="sec-intro" style="margin-bottom:20px;">The full spec defines eleven statistics; this implementation covers six, chosen to span the categories of structure the full set is designed to catch.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Statistic</th><th>What It Catches</th></tr></thead>
+        <tbody>
+          <tr><td>Excursion</td><td>Long-range drift away from the sample mean</td></tr>
+          <tr><td>Number of directional runs</td><td>Serial correlation — runs of increases/decreases</td></tr>
+          <tr><td>Longest directional run</td><td>Strong local trends</td></tr>
+          <tr><td>Number of increases/decreases</td><td>Asymmetry between rising and falling steps</td></tr>
+          <tr><td>Average collision distance</td><td>Local repetition, low local diversity</td></tr>
+          <tr><td>Mean log₂ gap (compression proxy)</td><td>Predictability from prior occurrences</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fix-callout">
+      <h4>A defect found and fixed during implementation</h4>
+      <p>An early version of the compression statistic used post-zlib-compression size. For genuinely random data, that statistic is essentially invariant under permutation — with no repeated substrings to exploit, compressed size depends only on input length, not order. Every shuffle produced the same value as the original, collapsing the test's discriminating power to zero and causing it to reject the IID hypothesis on every run, including genuinely IID input.</p>
+      <p>It was replaced with a statistic explicitly built around position — the mean of log₂(gap since this value was last seen) — which is directly sensitive to the order permutation destroys.</p>
+    </div>
+
+    <p class="sec-intro" style="margin-top:24px; margin-bottom:0;">The spec's extreme-tail threshold of 5 is calibrated for exactly N = 10,000 permutations. This implementation defaults to N = 1,000 for practical per-host runtime, so the threshold is scaled proportionally — <span style="font-family:var(--mono); color:var(--text);">max(1, round(5 × N / 10,000))</span> — keeping the per-statistic false-rejection rate roughly constant as N varies.</p>
+  </div>
+</section>
+
+<section id="noniid">
+  <div class="wrap">
+    <div class="sec-label">Section 6.3 · Non-IID Min-Entropy Estimators</div>
+    <h2>Ten estimators. The minimum across all of them is the assessment.</h2>
+    <p class="sec-intro">When the IID test rejects, the source might be weak in any of several unrelated ways — so all ten run, and a source is only as strong as its single worst property. Every estimator uses the same confidence-bound pattern: an observed probability estimate, then a one-sided 99% upper confidence bound, so sampling noise can never make a source look better than it is.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Estimator</th><th>What It Measures</th></tr></thead>
+        <tbody>
+          <tr><td>Most Common Value</td><td>Upper bound on the single most frequent symbol's probability</td></tr>
+          <tr><td>Collision</td><td>Mean samples before a value repeats, inverted via the birthday-problem approximation</td></tr>
+          <tr><td>Markov</td><td>Highest-probability path through a first-order transition matrix — short-range serial correlation</td></tr>
+          <tr><td>Compression</td><td>Maurer's universal statistical test — short, predictable gaps indicate low entropy</td></tr>
+          <tr><td>t-Tuple / LRS</td><td>Largest repeating tuple length / longest repeated substring anywhere in the sample</td></tr>
+          <tr><td>MultiMCW / Lag / MultiMMC / LZ78Y Prediction</td><td>Four predictors — trailing-window mode, best-lag periodicity, adaptive Markov, LZ78-style dictionary</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sec-intro" style="margin-bottom:0;">The four prediction-based estimators each produce a global bound from overall accuracy and a local bound from the single longest correct-guess streak r. The reference algorithm solves the local bound numerically; this implementation uses the closed-form approximation p<sub>local</sub> ≈ 2<sup>−1/r</sup> — the same starting point the reference tool itself uses before refinement, within a fraction of a bit for realistic sample sizes.</p>
+  </div>
+</section>
+
+<section id="restart">
+  <div class="wrap">
+    <div class="sec-label">Section 3.1.4.3 · Restart Test</div>
+    <h2>Making sure the estimate isn't an artifact of one long run.</h2>
+    <p class="sec-intro">Many independent short sequences are arranged into a matrix — restarts as rows, position within a restart as columns — and RCT/APT are re-applied row-wise and column-wise against the assessed min-entropy. An assessment is judged inconsistent if the observed failure rate is far above what the assumed entropy predicts, with a 1% failure-rate tolerance. The full spec calls for ≥1,000 restarts of ≥1,000 samples each; smaller matrices are accepted and reported explicitly as below full statistical power, since a directional signal is still useful for routine monitoring.</p>
+  </div>
+</section>
+
+<section id="validation">
+  <div class="wrap">
+    <div class="sec-label">Validation</div>
+    <h2>Tested against both a clean source and a deliberately broken one.</h2>
+    <div class="val-row">
+      <div class="val-card">
+        <div class="v-num">0%</div>
+        <p>False-rejection rate across ten independent 2,048-byte os.urandom() samples at N=2,000 permutations, after the compression-statistic fix and threshold scaling — down from a ~37.5% false-rejection rate on the same data beforehand.</p>
+      </div>
+      <div class="val-card">
+        <div class="v-num">~0.03</div>
+        <p>Bits/symbol assigned to a synthetic "stuck" source (one symbol heavily overrepresented in a 4-symbol set) — correctly rejected by the IID test, correctly scored near-zero by the Most Common Value and Markov estimators, correctly triggering health-check alerts end to end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="limitations">
+  <div class="wrap">
+    <div class="sec-label">Known Limitations</div>
+    <h2>What this trades off to be genuinely useful for continuous fleet monitoring.</h2>
+    <div class="honest-grid">
+      <div class="honest-col">
+        <h4>Coverage trade-offs</h4>
+        <ul>
+          <li><strong>Partial IID statistic coverage</strong>Six of the spec's eleven Section 5.1 statistics are implemented. Periodicity and covariance at lags 1/2/8/16/32, and the companion collision-test statistics, are not yet covered.</li>
+          <li><strong>Reduced default permutation/restart counts</strong>1,000 permutations and far fewer than 1,000 restarts by default, for practical per-host runtime in an agent that runs repeatedly — both configurable up to the spec's full 10,000/1,000 scale at the cost of runtime.</li>
+        </ul>
+      </div>
+      <div class="honest-col">
+        <h4>Approximation trade-offs</h4>
+        <ul>
+          <li><strong>Closed-form approximations in three estimators</strong>The Collision estimator's birthday-problem inversion and the four prediction estimators' local bound use standard closed-form approximations rather than the reference tool's exact numerical root-finding.</li>
+          <li><strong>Not a certified validation tool</strong>Suitable for continuous operational monitoring — catching regressions, misconfigurations, and outright failures over time — but not a substitute for a CMVP-recognized entropy source validation using NIST's reference implementation for compliance purposes.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fit">
+  <div class="wrap">
+    <div class="sec-label">Where It Fits</div>
+    <h2>Entropy Source builds the noise source. Entropy Tester watches it stay honest.</h2>
+    <div class="position-callout">
+      <h3>Certification is a snapshot. Fleets change every day.</h3>
+      <p><strong>Entropy Source</strong> is the noise source itself — engineered toward NIST SP 800-90B conformance and an issued ESV certificate, a one-time (if recurring) certification event.</p>
+      <p><strong>Entropy Tester</strong> is what runs after that certificate is issued — and works against any entropy source, not just ours. Virtualization artifacts, hardware faults, and configuration drift can degrade a source long after it passed validation, on some subset of hosts and not others. Continuous testing is how you'd actually find that, instead of assuming the certificate still describes reality a year later.</p>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta" id="cta">
+  <div class="wrap" style="text-align:center;">
+    <div class="sec-label" style="text-align:center;">Get Started</div>
+    <h2>Certification tells you a source was good once. This tells you it still is.</h2>
+    <p class="sec-intro">Fleet-monitoring integration details, the signed-report format, and the dashboard aggregation layer are documented separately — ask us for the full methodology report.</p>
+    <div class="hero-ctas" style="justify-content:center;">
+      <a href="index.html#cta" class="btn btn-primary">Talk to Us</a>
+      <a href="entropy-source.html" class="btn btn-secondary">Compare to Entropy Source</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="encrypt-logo.png" class="logo-mark-img" alt="Collatz Labs logo"> COLLATZ LABS</div>
+        <p>Business-adaptive cryptographic solutions that protect your systems from quantum threats.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Product</h5>
+        <a href="zkassess.html">zkAssess</a>
+        <a href="post-quantum-cryptography.html">Post-Quantum Cryptography</a>
+        <a href="entropy-source.html">Entropy Source</a>
+        <a href="entropy-tester.html">Entropy Tester</a>
+        <a href="prng.html">Open Source Pseudorandom Number Generator</a>
+        <div>Quantum Random Number Generator (coming soon)</div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="why-encrypt.html">Why Collatz Labs</a>
+        <a href="publications.html">Publications</a>
+        <a href="about.html">About Us</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <div>contact@collatzlabs.dev</div>
+        <a href="#">Request a briefing</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Collatz Labs. All products built on the same trust-boundary protocol.</span>
+      <span>Entropy Tester methodology report</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const productDrop = document.getElementById('productDrop');
+  const dropTrigger = productDrop.querySelector('.nav-drop-trigger');
+  dropTrigger.addEventListener('click', (e) => { e.stopPropagation(); const isOpen = productDrop.classList.toggle('open'); dropTrigger.setAttribute('aria-expanded', isOpen); });
+  document.addEventListener('click', () => { productDrop.classList.remove('open'); dropTrigger.setAttribute('aria-expanded', 'false'); });
+</script>
+</body>
+</html>
