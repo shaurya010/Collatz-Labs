@@ -133,6 +133,34 @@
   .value-card p{color:var(--text-muted); font-size:13.5px;}
   @media (max-width:820px){.values-grid{grid-template-columns:1fr;}}
 
+  /* ---------- TEAM ---------- */
+  .team-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:44px;}
+  .advisory-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .team-card{
+    border:1px solid var(--border); border-radius:6px; padding:28px; background:var(--bg-panel-alt);
+    display:flex; flex-direction:column; transition:border-color .18s ease;
+  }
+  .team-avatar{
+    width:56px; height:56px; border-radius:50%; margin-bottom:16px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(155deg, var(--gold-dim), var(--bg-panel));
+    border:1px solid var(--gold-dim);
+    font-family:var(--mono); font-size:16px; font-weight:700; color:var(--gold);
+    overflow:hidden; flex-shrink:0;
+  }
+  .team-avatar img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
+  .team-card:hover{border-color:var(--gold-dim);}
+  .team-card .t-role{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); margin-bottom:10px;}
+  .team-card h4{font-family:var(--mono); font-size:18px; font-weight:600; margin-bottom:6px;}
+  .team-card .t-aff{font-size:13px; color:var(--text-dim); margin-bottom:16px;}
+  .team-card a.t-link{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-muted); display:inline-flex; align-items:center; gap:6px;
+    border:1px solid var(--border); border-radius:20px; padding:6px 14px; width:fit-content; transition:all .15s ease;
+  }
+  .team-card a.t-link:hover{color:var(--gold); border-color:var(--gold-dim);}
+  .team-subhead{font-family:var(--mono); font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px;}
+  @media (max-width:720px){.team-grid, .advisory-grid{grid-template-columns:1fr;}}
+
   /* final CTA */
   .final-cta{text-align:center; padding:90px 0;}
   .final-cta h2{margin:0 auto 20px; max-width:600px;}
@@ -281,6 +309,46 @@
         <div class="v-num">03</div>
         <h4>Honest about the current line</h4>
         <p>We say plainly what today's implementation does and doesn't guarantee, and publish a roadmap to close the gap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <div class="sec-label">Team</div>
+    <h2>Who's behind Collatz Labs.</h2>
+    <p class="sec-intro">A small team working on cryptography that's meant to be read, checked, and used — not just cited.</p>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar"><img src="shaurya-pic.jpg" alt="Shaurya Pratap Singh"></div>
+        <div class="t-role">Founder</div>
+        <h4>Shaurya Pratap Singh</h4>
+        <div class="t-aff">Department of Computer Science and Automation, Indian Institute of Science, Bengaluru</div>
+        <a href="https://www.linkedin.com/in/shaurya-pratap-singh010/" class="t-link" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="anubrata-pic.jpg" alt="Anubrata Singharoy"></div>
+        <div class="t-role">Cryptographic Researcher</div>
+        <h4>Anubrata Singharoy</h4>
+        <a href="https://www.linkedin.com/in/anubrata-singharoy-2824a4216/" class="t-link" target="_blank" rel="noopener" style="margin-top:16px;">LinkedIn ↗</a>
+      </div>
+    </div>
+
+    <div class="team-subhead">Advisory Board</div>
+    <div class="advisory-grid">
+      <div class="team-card">
+        <div class="team-avatar"><img src="brijesh-pic.jpg" alt="Dr. Brijesh Kumar Chaurasia"></div>
+        <div class="t-role">Advisor</div>
+        <h4>Dr. Brijesh Kumar Chaurasia</h4>
+        <a href="https://scholar.google.com/citations?user=6_mlT18AAAAJ&hl=en" class="t-link" target="_blank" rel="noopener" style="margin-top:16px;">Google Scholar ↗</a>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="atul-pic.jpg" alt="Atul Chaturvedi"></div>
+        <div class="t-role">Advisor</div>
+        <h4>Atul Chaturvedi</h4>
+        <a href="https://scholar.google.com/citations?user=FS55zgEAAAAJ&hl=en" class="t-link" target="_blank" rel="noopener" style="margin-top:16px;">Google Scholar ↗</a>
       </div>
     </div>
   </div>
