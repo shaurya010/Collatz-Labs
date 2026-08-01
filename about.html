@@ -158,6 +158,8 @@
     border:1px solid var(--border); border-radius:20px; padding:6px 14px; width:fit-content; transition:all .15s ease;
   }
   .team-card a.t-link:hover{color:var(--gold); border-color:var(--gold-dim);}
+  .team-card .t-links{display:flex; flex-direction:row; flex-wrap:wrap; gap:10px; margin-top:auto; padding-top:16px;}
+  .team-card .t-links a.t-link{margin-top:0;}
   .team-subhead{font-family:var(--mono); font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px;}
   @media (max-width:720px){.team-grid, .advisory-grid{grid-template-columns:1fr;}}
 
@@ -325,8 +327,10 @@
         <div class="t-role">Founder</div>
         <h4>Shaurya Pratap Singh</h4>
         <div class="t-aff">Pre-Doc @ Indian Institute of Science, Bengaluru, Ex-DRDO, Ex-Research Intern @ CAIR, DRDO.</div>
-        <a href="https://www.linkedin.com/in/shaurya-pratap-singh010/" class="t-link" target="_blank" rel="noopener" >LinkedIn ↗</a>
-        <a href="https://scholar.google.com/citations?user=HDNW1HsAAAAJ&hl=en" class="t-link" target="_blank" rel="noopener" >Google Scholar ↗</a>
+        <div class="t-links">
+          <a href="https://www.linkedin.com/in/shaurya-pratap-singh010/" class="t-link" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://scholar.google.com/citations?user=HDNW1HsAAAAJ&hl=en" class="t-link" target="_blank" rel="noopener">Google Scholar ↗</a>
+        </div>
       </div>
 
       
@@ -335,7 +339,9 @@
         <div class="t-role">Cryptographic Researcher</div>
         <h4>Anubrata Singharoy</h4>
         <div class="t-aff">RA @ Indian Institute of Science, Bengaluru <br> M.Tech, IIT Palakkad</div>
-        <a href="https://www.linkedin.com/in/anubrata-singharoy-2824a4216/" class="t-link" target="_blank" rel="noopener" style="margin-top:16px;">LinkedIn ↗</a>
+        <div class="t-links">
+          <a href="https://www.linkedin.com/in/anubrata-singharoy-2824a4216/" class="t-link" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
       </div>
     </div>
 
@@ -345,13 +351,17 @@
         <div class="team-avatar"><img src="brijesh-pic.jpg" alt="Dr. Brijesh Kumar Chaurasia"></div>
         <div class="t-role">Advisor</div>
         <h4>Dr. Brijesh Kumar Chaurasia</h4>
-        <a href="https://scholar.google.com/citations?user=6_mlT18AAAAJ&hl=en" class="t-link" target="_blank" rel="noopener" style="margin-top:16px;">Google Scholar ↗</a>
+        <div class="t-links">
+          <a href="https://scholar.google.com/citations?user=6_mlT18AAAAJ&hl=en" class="t-link" target="_blank" rel="noopener">Google Scholar ↗</a>
+        </div>
       </div>
       <div class="team-card">
         <div class="team-avatar"><img src="atul-pic.jpg" alt="Dr. Atul Chaturvedi"></div>
         <div class="t-role">Advisor</div>
         <h4>Dr. Atul Chaturvedi</h4>
-        <a href="https://scholar.google.com/citations?user=FS55zgEAAAAJ&hl=en" class="t-link" target="_blank" rel="noopener" style="margin-top:16px;">Google Scholar ↗</a>
+        <div class="t-links">
+          <a href="https://scholar.google.com/citations?user=FS55zgEAAAAJ&hl=en" class="t-link" target="_blank" rel="noopener">Google Scholar ↗</a>
+        </div>
       </div>
     </div>
   </div>
