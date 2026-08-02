@@ -228,6 +228,43 @@
   </div>
 </section>
 
+
+
+
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-label">Try It Yourself</div>
+    <h2>The exact construction above, running live in your browser.</h2>
+    <p class="sec-intro">This isn't a mockup — it's a JavaScript port of the same C++ reference implementation below: the Collatz OWF, the Goldreich–Levin hardcore bit, and the iterated PRNG, run step for step. Nothing here is sent anywhere; it all runs client-side, in this page.</p>
+
+    <div class="demo-panel">
+      <div class="demo-note">⚠ Research preview — for exploration only, not production use. See the honest caveat further down this page.</div>
+
+      <div class="demo-row">
+        <div class="demo-field">
+          <label>512-bit seed (128 hex chars)</label>
+          <input type="text" id="demoSeed" spellcheck="false" placeholder="Click 'Random Seed' to generate one">
+        </div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-field" style="max-width:180px;">
+          <label>Bytes to generate</label>
+          <input type="number" id="demoBytes" value="32" min="1" max="2048">
+        </div>
+      </div>
+      <div class="demo-btn-row">
+        <button class="demo-btn" id="demoRandomSeed" type="button">Random Seed</button>
+        <button class="demo-btn primary" id="demoGenerate" type="button">Generate</button>
+      </div>
+      <div class="demo-output" id="demoOutput">Output will appear here.</div>
+      <div class="demo-status" id="demoStatus"></div>
+    </div>
+  </div>
+</section>
+
+
+  
+
 <section id="construction">
   <div class="wrap">
     <div class="sec-label">The Construction</div>
@@ -269,36 +306,10 @@
   </div>
 </section>
 
-<section id="demo">
-  <div class="wrap">
-    <div class="sec-label">Try It Yourself</div>
-    <h2>The exact construction above, running live in your browser.</h2>
-    <p class="sec-intro">This isn't a mockup — it's a JavaScript port of the same C++ reference implementation below: the Collatz OWF, the Goldreich–Levin hardcore bit, and the iterated PRNG, run step for step. Nothing here is sent anywhere; it all runs client-side, in this page.</p>
 
-    <div class="demo-panel">
-      <div class="demo-note">⚠ Research preview — for exploration only, not production use. See the honest caveat further down this page.</div>
 
-      <div class="demo-row">
-        <div class="demo-field">
-          <label>512-bit seed (128 hex chars)</label>
-          <input type="text" id="demoSeed" spellcheck="false" placeholder="Click 'Random Seed' to generate one">
-        </div>
-      </div>
-      <div class="demo-row">
-        <div class="demo-field" style="max-width:180px;">
-          <label>Bytes to generate</label>
-          <input type="number" id="demoBytes" value="32" min="1" max="2048">
-        </div>
-      </div>
-      <div class="demo-btn-row">
-        <button class="demo-btn" id="demoRandomSeed" type="button">Random Seed</button>
-        <button class="demo-btn primary" id="demoGenerate" type="button">Generate</button>
-      </div>
-      <div class="demo-output" id="demoOutput">Output will appear here.</div>
-      <div class="demo-status" id="demoStatus"></div>
-    </div>
-  </div>
-</section>
+
+  
 
 <section id="results">
   <div class="wrap">
