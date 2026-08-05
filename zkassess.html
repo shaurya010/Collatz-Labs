@@ -230,6 +230,22 @@
     letter-spacing:-0.01em; max-width:680px; margin-bottom:18px;
   }
   .sec-intro{color:var(--text-muted); max-width:640px; font-size:16px; margin-bottom:52px;}
+
+  /* ---------- PLAIN-ENGLISH CALLOUT ---------- */
+  .plain-explain{
+    display:flex; gap:16px; align-items:flex-start;
+    border:1px solid var(--gold-dim); border-radius:8px; background:rgba(242,184,75,0.05);
+    padding:22px 26px; margin-bottom:36px; max-width:760px;
+  }
+  .plain-explain .pe-icon{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.06em; color:var(--gold);
+    border:1px solid var(--gold-dim); border-radius:20px; padding:4px 10px; flex-shrink:0; white-space:nowrap;
+  }
+  .plain-explain p{color:var(--text); font-size:15px; line-height:1.6; margin:0;}
+  .tech-toggle-label{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-dim); letter-spacing:0.05em;
+    text-transform:uppercase; margin:8px 0 14px;
+  }
   .sec-intro.gold{color:var(--gold);}
 
   /* two-phase split */
@@ -675,20 +691,24 @@
 
 <section id="boundary">
   <div class="wrap">
-    <div class="sec-label">01 · Why Zero-Knowledge Doesn't Directly Apply</div>
-    <h2>A security scan is open-ended discovery. A zero-knowledge proof needs a known claim.</h2>
-    <p class="sec-intro">A ZK proof establishes that a specific, already-identified statement holds — it can't discover a vulnerability nobody has named yet. So zkAssess splits the problem into the two shapes each technique actually handles.</p>
+    <div class="sec-label">01 · How It Actually Works</div>
+    <h2>We look at everything. We only ever hand over a receipt.</h2>
+    <div class="plain-explain">
+      <span class="pe-icon">In plain terms</span>
+      <p>Finding a problem in your code means actually reading the code — there's no way around that. So that part happens privately, on your own machine. Once something is found, we only need to prove <em>that one specific thing</em> is real — like showing a notarized receipt instead of your whole bank statement.</p>
+    </div>
+    <p class="sec-intro">A pure "zero-knowledge proof" can only prove something you've already identified — it can't go looking for problems on its own. So zkAssess splits the job in two: look privately, then prove narrowly.</p>
 
     <div class="split-grid">
       <div class="split-card">
         <div class="num">PHASE 1</div>
-        <h3>Discovery (open-ended)</h3>
-        <p>A deterministic scanner checks every line against a fixed, versioned list of known-bad and known-good cryptographic patterns. This needs full visibility, so it stays inside your trust boundary — local, in CI, or inside a TEE.</p>
+        <h3>Look (stays private)</h3>
+        <p>A scanner checks every line of your code against a public list of known-risky and known-safe patterns. This step needs to see everything, so it never leaves your computer, your CI pipeline, or your own secure environment.</p>
       </div>
       <div class="split-card">
         <div class="num">PHASE 2</div>
-        <h3>Attestation (narrow, known claim)</h3>
-        <p>Once a finding exists, "this exact redacted line is really present in a file with hash H, at line N" is precisely the narrow, provable statement that selective-disclosure techniques are built for.</p>
+        <h3>Prove (what leaves)</h3>
+        <p>For each thing found, we generate a small, provable receipt — "this exact (redacted) line really exists at this file and line number." That receipt is mathematically checkable without ever showing anyone the file itself.</p>
       </div>
     </div>
 
@@ -697,18 +717,18 @@
     <div class="boundary-diagram">
       <div class="bd-row">
         <div class="bd-inside">
-          <div class="bd-inside-label">Inside the repository owner's trust boundary</div>
+          <div class="bd-inside-label">Stays on your computer</div>
           <div class="bd-steps">
-            <div class="bd-step"><span class="dot"></span> Pattern engine scans the repository</div>
-            <div class="bd-step"><span class="dot"></span> Findings redacted at the point of detection</div>
-            <div class="bd-step"><span class="dot"></span> Merkle tree built, inclusion proofs generated</div>
-            <div class="bd-step"><span class="dot"></span> Score computed, attestation signed</div>
+            <div class="bd-step"><span class="dot"></span> Scans your code for known-risky patterns</div>
+            <div class="bd-step"><span class="dot"></span> Blacks out everything except the risky part</div>
+            <div class="bd-step"><span class="dot"></span> Builds a tamper-proof math receipt for each finding</div>
+            <div class="bd-step"><span class="dot"></span> Calculates a score and signs the result</div>
           </div>
         </div>
         <div class="bd-arrow">→</div>
         <div class="bd-outside">
-          <div class="bd-outside-label">Crosses the boundary</div>
-          <strong>Signed attestation only</strong>
+          <div class="bd-outside-label">What we actually see</div>
+          <strong>Signed report only</strong>
         </div>
       </div>
     </div>
@@ -717,9 +737,13 @@
 
 <section id="detection">
   <div class="wrap">
-    <div class="sec-label">02 · Detection Engine</div>
-    <h2>Deterministic pattern matching. Not an AI's opinion.</h2>
-    <p class="sec-intro">"This codebase uses RSA" is checkable. "This codebase is insecure" isn't — it's an unbounded judgment call. zkAssess keeps the provable part of the pipeline entirely deterministic: regex and syntax matching against a public, versioned pattern list.</p>
+    <div class="sec-label">02 · What We Look For</div>
+    <h2>A checklist, not a guess.</h2>
+    <div class="plain-explain">
+      <span class="pe-icon">In plain terms</span>
+      <p>Some encryption methods are strong today but will be breakable once quantum computers mature. Others are already weak, quantum or not. zkAssess checks your code against a public list of both — the same way a spell-checker flags misspelled words, not an opinion about your writing style.</p>
+    </div>
+    <p class="sec-intro">"This codebase uses RSA" is a fact you can check. "This codebase is insecure" is a judgment call. zkAssess sticks to the checkable part: matching code against a public, versioned list — nothing guessed, nothing subjective.</p>
 
     <div class="table-wrap">
       <table>
@@ -755,10 +779,15 @@
 
 <section id="scoring">
   <div class="wrap">
-    <div class="sec-label">03 · Scoring Model</div>
-    <h2>One reproducible formula. As many risk postures as you have compliance regimes.</h2>
-    <p class="sec-intro">The baseline score is simple and public: findings are weighted by severity, summed, and subtracted from 100. Because the formula and weights are versioned alongside the pattern set, any verifier can recompute the same number from the same inputs.</p>
+    <div class="sec-label">03 · How Scoring Works</div>
+    <h2>Think credit score, not exam grade.</h2>
+    <div class="plain-explain">
+      <span class="pe-icon">In plain terms</span>
+      <p>Every codebase starts at 100. Each problem we find costs points — the more serious the problem, the more it costs. A single critical issue (like a badly broken cipher) can cost 25 points on its own; a minor configuration quirk might cost 2.</p>
+    </div>
+    <p class="sec-intro">This isn't a black box: the exact formula and weights are public and versioned, so anyone — you, an auditor, a customer — can re-run the numbers themselves and get the same score.</p>
 
+    <div class="tech-toggle-label">↓ For the technically curious: the exact formula</div>
     <div class="formula-box">
       <div class="f-main">Score = max( 0,  100 − Σ w(severity) · [category ≠ quantum-safe] )</div>
       <div class="weights-row">
@@ -771,7 +800,7 @@
       <div class="f-note">Default severity weights. One critical DES finding plus two high findings (RSA, MD5) → 100 − (25+12+12) = 51 under baseline.</div>
     </div>
 
-    <p class="sec-intro" style="margin-bottom:0;">No single formula reflects every organization's risk tolerance. A payments company may need any broken cipher to be an automatic failure; a government contractor may need quantum-vulnerable findings weighted well above everything else. zkAssess makes the weighting function itself a declared, versioned input — it travels with the attestation, so a policy can never be quietly loosened after the fact.</p>
+    <p class="sec-intro" style="margin-bottom:0;">Different organizations care about different things. A payments company might want any broken cipher to be an automatic fail; a government contractor might weight quantum-vulnerable findings far above everything else. zkAssess lets you declare that weighting up front — and it travels with the result, so a policy can never be quietly loosened after the fact.</p>
 
     <div class="profile-grid">
       <div class="profile-card"><div class="p-name">Baseline</div><p>Table 4 default weights. No category multipliers.</p></div>
@@ -785,24 +814,28 @@
 
 <section id="privacy">
   <div class="wrap">
-    <div class="sec-label">04 · Privacy-Preserving Attestation Layer</div>
-    <h2>Redact at detection. Commit with Merkle proofs. Sign the result.</h2>
-    <p class="sec-intro">A finding is recorded with only a bounded window of context around the matched text — by default twenty characters on either side. Every other line in the file is hashed into a Merkle tree and never retained. A verifier can confirm a flagged line is genuinely part of a file with a given hash, without ever receiving the file.</p>
+    <div class="sec-label">04 · What We Share, Exactly</div>
+    <h2>A little goes out. Almost everything stays in.</h2>
+    <div class="plain-explain">
+      <span class="pe-icon">In plain terms</span>
+      <p>When we find something, we only keep a tiny snippet of text around it (about 20 characters on either side) — everything else in that file gets turned into a mathematical fingerprint instead of being kept as readable text. That fingerprint lets someone confirm the finding is real, without ever seeing the file it came from.</p>
+    </div>
+    <p class="sec-intro">This is the whole privacy design in one sentence: keep a tiny, bounded snippet per finding, replace everything else with an unreadable fingerprint, and let that fingerprint be checked mathematically — never by handing over the file.</p>
 
     <div class="learn-grid">
       <div class="learn-col yes">
-        <h4>The verifier receives</h4>
+        <h4>What we receive</h4>
         <ul class="learn-list">
           <li>The overall quantum-readiness score</li>
           <li>Which pattern IDs matched, and how many times</li>
           <li>A short, bounded redacted snippet per finding</li>
           <li>The file path and line number of each finding</li>
-          <li>A cryptographic Merkle inclusion proof per finding</li>
+          <li>A cryptographic proof that each finding is real</li>
           <li>The pattern-set version, for reproducibility</li>
         </ul>
       </div>
       <div class="learn-col no">
-        <h4>The verifier never receives</h4>
+        <h4>What we never receive</h4>
         <ul class="learn-list">
           <li>The repository itself, in any form</li>
           <li>The full contents of any scanned file</li>
@@ -818,24 +851,28 @@
 
 <section id="gap">
   <div class="wrap">
-    <div class="sec-label">Honest about V0.1</div>
-    <h2>A Merkle proof is an honest, buildable stand-in. Not the end state.</h2>
-    <p class="sec-intro">A true zero-knowledge circuit would go further than what the current reference implementation does. We'd rather tell you where the line sits today than overstate it.</p>
+    <div class="sec-label">Being Honest About Today's Version</div>
+    <h2>Good enough to trust today. Not the finish line.</h2>
+    <div class="plain-explain">
+      <span class="pe-icon">In plain terms</span>
+      <p>The math technique we use today (a "Merkle proof") is a real, working way to prove a finding without showing the file. A more advanced technique exists that would hide even more — we're building toward it, but it's not ready yet. Here's exactly what that gap means in practice.</p>
+    </div>
+    <p class="sec-intro">We'd rather tell you where the line sits today than oversell it.</p>
     <div class="honest-grid">
       <div class="honest-col">
         <h4>What holds today</h4>
         <ul>
-          <li>Attestations can't be forged without the signing key</li>
-          <li>Tampering with score or proofs invalidates the signature or the Merkle verification</li>
-          <li>The pattern set is public, versioned, and shipped with every attestation</li>
+          <li>Results can't be faked without our private signing key</li>
+          <li>Any tampering with the score or the proof breaks the verification — it's immediately obvious</li>
+          <li>The pattern set is public, versioned, and shipped with every result</li>
         </ul>
       </div>
       <div class="honest-col">
         <h4>What's not solved yet</h4>
         <ul>
-          <li>Redacted snippets are plaintext — a verifier with enough findings could infer file structure</li>
-          <li>Line position and hash are disclosed, which could confirm a guess at known file contents</li>
-          <li>Trust in the attestor is currently single-party, not decentralized</li>
+          <li>The small redacted snippets are still readable text — with enough findings, someone could piece together hints about file structure</li>
+          <li>Line position is disclosed, which could help confirm a guess about known file contents</li>
+          <li>Right now, you have to trust our signing process — a fully decentralized version is on the roadmap</li>
         </ul>
       </div>
     </div>
@@ -893,33 +930,33 @@
 
 <section id="roadmap">
   <div class="wrap">
-    <div class="sec-label">05 · Roadmap</div>
-    <h2>Every stage is a version bump toward a stronger guarantee.</h2>
+    <div class="sec-label">05 · What We're Building Next</div>
+    <h2>Each step hides a little more, or trusts us a little less.</h2>
     <div class="roadmap">
       <div class="rm-item">
         <div class="rm-tag">Highest priority</div>
         <h4>A true zero-knowledge circuit</h4>
-        <p>Replace the Merkle inclusion proof with a circuit that proves a pattern match exists in a committed file without revealing the line's content or position at all.</p>
+        <p>The next-generation proof technique — it would let us prove a finding is real without revealing its content <em>or</em> its position at all, closing the last two gaps described above.</p>
       </div>
       <div class="rm-item">
         <div class="rm-tag">Trust model</div>
-        <h4>Decentralized multi-attestor network</h4>
-        <p>Independent attestor nodes, selected through an auction mechanism with economic staking, remove the need to trust any single signer.</p>
+        <h4>A network, not a single signer</h4>
+        <p>Instead of one party (us) signing every result, independent outside parties would co-sign — so no single organization has to be trusted alone.</p>
       </div>
       <div class="rm-item">
         <div class="rm-tag">Outsourced scanning</div>
-        <h4>TEE-based analysis</h4>
-        <p>A split-trust architecture across two Trusted Execution Environments, for cases where even the repository owner's own infrastructure shouldn't see plaintext.</p>
+        <h4>Secure hardware for extra-sensitive cases</h4>
+        <p>For organizations where even their own servers shouldn't see the raw code, analysis could run inside specialized secure hardware that even we, or they, can't peek inside.</p>
       </div>
       <div class="rm-item">
         <div class="rm-tag">Signature layer</div>
-        <h4>Post-quantum signatures</h4>
-        <p>ML-DSA (Dilithium) as an alternative to HMAC-SHA256 for public, many-verifier attestations — keeping the protocol's own signatures quantum-resistant end to end.</p>
+        <h4>Quantum-resistant signatures</h4>
+        <p>Right now our own signatures use a classical method. We're planning to switch to a quantum-resistant one — so even the proof-signing itself stays secure long-term.</p>
       </div>
       <div class="rm-item">
         <div class="rm-tag">Coverage</div>
-        <h4>Expanded pattern coverage</h4>
-        <p>TLS and ciphersuite configuration scanning, dependency-manifest checks for known-vulnerable packages, and AST-based matching to cut false positives and negatives.</p>
+        <h4>More things to check for</h4>
+        <p>Expanding beyond code itself to also check network configuration, third-party package dependencies, and reducing false alarms with smarter code analysis.</p>
       </div>
     </div>
   </div>
