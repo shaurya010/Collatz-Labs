@@ -236,33 +236,6 @@
   </div>
 
 
-  <div class="sec-label hybrid-label">The Problem Nobody's Algorithm Fixes For You</div>
-    <h2>The math is sound. The chip running it can still leak the key.</h2>
-    <p class="sec-intro">Lattice-based algorithms like ML-KEM are mathematically strong enough to resist both classical and quantum attacks. But a device executing that math still draws power and emits electromagnetic signals while it runs — and an attacker who can measure that physical "exhaust" can sometimes recover the secret key without ever attacking the math itself.</p>
-
-    <div class="sca-grid">
-      <div class="sca-col problem">
-        <h4>The Risk</h4>
-        <ul class="sca-list">
-          <li><strong>Power &amp; EM leakage</strong>Processors executing lattice math draw measurably different power depending on secret values — an attacker with physical or co-located access can extract keys from those traces.</li>
-          <li><strong>FO-transform exposure</strong>The Fujisaki-Okamoto transform used inside ML-KEM re-encrypts and compares during decapsulation — a step that's been shown to leak information correlated with the secret message if implemented naively.</li>
-          <li><strong>Timing variance</strong>Any operation whose execution time depends on a secret value gives an attacker a channel, even without physical access to the device.</li>
-        </ul>
-      </div>
-      <div class="sca-col solution">
-        <h4>How We Mitigate It</h4>
-        <ul class="sca-list">
-          <li><strong>Constant-time implementation</strong>Every operation on secret data runs in fixed time, regardless of the secret's value.</li>
-          <li><strong>Masking</strong>Secret values are split into random shares before any sensitive operation, so a single power or EM trace reveals only noise.</li>
-          <li><strong>Shuffling</strong>The order of independent operations is randomized per execution, denying an attacker a fixed target to average traces against.</li>
-          <li><strong>Leakage assessment before deployment</strong>Every implementation is evaluated against a leakage-testing methodology before it ships.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-
   
 </section>
 
