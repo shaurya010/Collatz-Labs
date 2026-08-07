@@ -217,8 +217,7 @@
 <section class="page-hero">
   <div class="wrap page-hero-inner">
     <div class="eyebrow">Why Collatz Labs</div>
-    <h1>The post-quantum transition isn't a thought experiment. <span class="accent">It's already in production.</span></h1>
-    <p class="page-hero-sub">We follow the same practical path the industry has already converged on — not a hypothetical one.</p>
+    <h1>The Quantum & AI threats are real for you product. <span class="accent">The attacks already effecting the market.</span></h1>
   </div>
 </section>
 
@@ -226,7 +225,6 @@
   <div class="wrap">
     <div class="sec-label">The Threat Is Timed, Not Theoretical</div>
     <h2>Data encrypted today can be decrypted later. That attack is already running.</h2>
-    <p class="sec-intro">Adversaries don't need a working quantum computer today to profit from one tomorrow. They can capture encrypted traffic and backups now, store them, and decrypt them once a large enough quantum computer exists — an approach security researchers call "harvest now, decrypt later." Any data that needs to stay confidential for years — health records, financial data, trade secrets, government communications — is exposed to this today, not someday.</p>
 
     <div class="timeline">
       <div class="tl-item">
@@ -257,7 +255,6 @@
   <div class="wrap">
     <div class="sec-label">Not Hypothetical — Already Shipping</div>
     <h2>The industry stopped debating this and started deploying it.</h2>
-    <p class="sec-intro">This isn't a future roadmap borrowed from a whitepaper. Hybrid post-quantum key exchange — classical and quantum-resistant algorithms running together — is already protecting production traffic at internet scale.</p>
     <div class="proof-row">
       <div class="proof-card">
         <div class="p-num">50%+</div>
@@ -290,8 +287,6 @@
   <div class="wrap">
     <div class="sec-label">Our Path — Grounded, Not Guesswork</div>
     <h2>The steps every credible migration takes, in the order that actually works.</h2>
-    <p class="sec-intro">Security agencies and standards bodies are consistent on this: migration starts with a cryptographic inventory, not an algorithm purchase. We follow that order, and we solve the part most inventories get wrong — doing it without exposing your code.</p>
-
     <div class="path-deep">
       <div class="path-deep-item live">
         <div class="pd-step"><div class="pd-num">01</div><span class="pd-tag live">Live</span></div>
@@ -342,42 +337,6 @@
   </div>
 </section>
 
-<section id="hybrid-vs-pure">
-  <div class="wrap">
-    <div class="sec-label">Hybrid vs. Pure Post-Quantum Cryptography</div>
-    <h2>Neither is universally "right." The findings and the constraints decide.</h2>
-    <p class="sec-intro">This is the same choice enterprises deploying Post-Quantum Cryptography today are actually making, not a simplified marketing binary.</p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Consideration</th><th>Hybrid Post-Quantum Cryptography</th><th>Pure Post-Quantum Cryptography</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>How it works</td>
-            <td>Classical (e.g. ECDH) and post-quantum (ML-KEM) algorithms run side by side; a session is only broken if both fail.</td>
-            <td>Quantum-resistant algorithms replace classical ones outright — no classical fallback.</td>
-          </tr>
-          <tr>
-            <td>Best fit</td>
-            <td>Public-facing infrastructure and systems that must stay compatible with clients that don't support Post-Quantum Cryptography yet.</td>
-            <td>New systems, and regimes such as CNSA 2.0 that plan to require quantum-resistant-only algorithms.</td>
-          </tr>
-          <tr>
-            <td>Who's shipped it</td>
-            <td>Cloudflare, Google Chrome, and Apple iMessage already run hybrid key exchange in production.</td>
-            <td>Expected as the endpoint of most migration roadmaps once compatibility constraints are gone.</td>
-          </tr>
-          <tr>
-            <td>Trade-off</td>
-            <td>Larger handshake sizes and two algorithms to maintain, in exchange for a safer transition.</td>
-            <td>Simpler long-term footprint, but no fallback if a client or dependency can't yet support it.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
 
 <section id="zk">
   <div class="wrap">
