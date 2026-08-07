@@ -236,43 +236,13 @@
   </div>
 </section>
 
+
+  
+
 <section id="hybrid">
-  <div class="wrap">
-    <div class="sec-label hybrid-label">Hybrid Post-Quantum Cryptography</div>
-    <h2>Classical and post-quantum key exchange, combined into one shared secret.</h2>
-    <p class="sec-intro">A hybrid handshake runs a classical algorithm (like ECDH/X25519) and a post-quantum one (ML-KEM) in parallel, then derives the session key from both. An attacker has to break both the classical and the quantum-resistant algorithm to read the traffic — not just one.</p>
 
-    <div class="hybrid-diagram">
-      <div class="hd-row">
-        <div class="hd-box"><div class="hd-label">Classical</div><strong>X25519 / ECDH</strong></div>
-        <div class="hd-plus">+</div>
-        <div class="hd-box"><div class="hd-label">Post-Quantum</div><strong>ML-KEM (FIPS 203)</strong></div>
-      </div>
-      <div class="hd-result"><span>Both combined into a single session key — broken only if both algorithms are broken</span></div>
-    </div>
 
-    <div style="height:44px"></div>
-
-    <div class="sec-label hybrid-label">Already in Production</div>
-    <h2>This isn't a pilot. It's already protecting internet-scale traffic.</h2>
-    <div class="proof-row">
-      <div class="proof-card">
-        <div class="p-num">50%+</div>
-        <p>Of human-initiated web traffic through Cloudflare already uses post-quantum hybrid key agreement.</p>
-      </div>
-      <div class="proof-card">
-        <div class="p-num">3</div>
-        <p>Cloudflare, Google Chrome, and Apple iMessage have all shipped hybrid post-quantum key exchange to production.</p>
-      </div>
-      <div class="proof-card">
-        <div class="p-num">0</div>
-        <p>Classical compatibility lost — hybrid mode keeps working with clients that don't yet support Post-Quantum Cryptography.</p>
-      </div>
-    </div>
-
-    <div style="height:44px"></div>
-
-    <div class="sec-label hybrid-label">The Problem Nobody's Algorithm Fixes For You</div>
+  <div class="sec-label hybrid-label">The Problem Nobody's Algorithm Fixes For You</div>
     <h2>The math is sound. The chip running it can still leak the key.</h2>
     <p class="sec-intro">Lattice-based algorithms like ML-KEM are mathematically strong enough to resist both classical and quantum attacks. But a device executing that math still draws power and emits electromagnetic signals while it runs — and an attacker who can measure that physical "exhaust" can sometimes recover the secret key without ever attacking the math itself.</p>
 
@@ -296,7 +266,28 @@
       </div>
     </div>
   </div>
-</section>
+
+
+  
+  <div class="wrap">
+    <div class="sec-label hybrid-label">Hybrid Post-Quantum Cryptography</div>
+    <h2>Classical and post-quantum key exchange, combined into one shared secret.</h2>
+    <p class="sec-intro">A hybrid handshake runs a classical algorithm (like ECDH/X25519) and a post-quantum one (ML-KEM) in parallel, then derives the session key from both. An attacker has to break both the classical and the quantum-resistant algorithm to read the traffic — not just one.</p>
+
+    <div class="hybrid-diagram">
+      <div class="hd-row">
+        <div class="hd-box"><div class="hd-label">Classical</div><strong>X25519 / ECDH</strong></div>
+        <div class="hd-plus">+</div>
+        <div class="hd-box"><div class="hd-label">Post-Quantum</div><strong>ML-KEM (FIPS 203)</strong></div>
+      </div>
+      <div class="hd-result"><span>Both combined into a single session key — broken only if both algorithms are broken</span></div>
+    </div>
+
+    <div style="height:44px"></div>
+
+  
+
+  </section>
 
 <section id="pure">
   <div class="wrap">
@@ -330,30 +321,7 @@
 
     <div style="height:44px"></div>
 
-    <div class="sec-label">The Problem Nobody's Algorithm Fixes For You</div>
-    <h2>Going pure doesn't remove the side-channel problem. It changes its shape.</h2>
-    <p class="sec-intro">With no classical fallback, Pure's signature and key-exchange operations are the only thing standing between an attacker and your keys. Signature schemes like ML-DSA carry their own side-channel exposure, distinct from ML-KEM's.</p>
-
-    <div class="sca-grid">
-      <div class="sca-col problem">
-        <h4>The Risk</h4>
-        <ul class="sca-list">
-          <li><strong>Signing-time leakage</strong>ML-DSA's signing process derives values from the secret key during rejection sampling — timing or power variance can leak key material across repeated signatures.</li>
-          <li><strong>Nonce and randomness exposure</strong>Weak or leaked randomness during signing has historically been the single most damaging class of signature-scheme failure.</li>
-          <li><strong>Single point of failure</strong>Without a classical algorithm running alongside it, a successful side-channel attack against the one deployed primitive is enough.</li>
-        </ul>
-      </div>
-      <div class="sca-col solution">
-        <h4>How We Mitigate It</h4>
-        <ul class="sca-list">
-          <li><strong>Constant-time signing and verification</strong>No secret-dependent branches or table lookups in the signing path.</li>
-          <li><strong>Masking of secret-key operations</strong>Key material is split into random shares through every sensitive step.</li>
-          <li><strong>Hardware-backed key isolation</strong>Private keys are generated and used inside a hardware security module or secure enclave.</li>
-          <li><strong>Independent leakage assessment</strong>Every deployed implementation is tested before rollout, and re-tested as libraries update.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+   
 </section>
 
 <section id="compare">
@@ -396,29 +364,10 @@
   </div>
 </section>
 
-<section id="zk-tie-in">
-  <div class="wrap">
-    <div class="sec-label">Where It Fits</div>
-    <h2>zkAssess's findings decide which path applies — not a blanket default.</h2>
-    <div class="zk-callout">
-      <h3>Matched to your findings, not applied blanket</h3>
-      <p>Hybrid is the right call for public-facing infrastructure and any system that has to keep working with clients that don't support post-quantum algorithms yet — exactly the systems zkAssess's scan surfaces as quantum-vulnerable but still client-constrained.</p>
-      <p>Where a system doesn't have that constraint — new services, internal infrastructure with full control over both ends — Pure is usually the better long-term fit. Most organizations don't choose once; they choose per system, and both paths get the same side-channel protections either way.</p>
-    </div>
-  </div>
-</section>
 
-<section class="final-cta" id="cta">
-  <div class="wrap" style="text-align:center;">
-    <div class="sec-label" style="text-align:center;">Get Started</div>
-    <h2>Start with the scan. We'll tell you which path fits.</h2>
-    <p class="sec-intro">See the full suite and start with what fits your systems today.</p>
-    <div class="hero-ctas">
-      <a href="index.html#products" class="btn btn-primary">Explore Product</a>
-      <a href="zkassess.html" class="btn btn-secondary">Start with zkAssess</a>
-    </div>
-  </div>
-</section>
+
+
+  
 
 <footer>
   <div class="wrap">
