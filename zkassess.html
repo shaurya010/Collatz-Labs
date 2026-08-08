@@ -421,7 +421,7 @@
         <span class="demo-topbar-live">● 2 min</span>
       </div>
       <div class="demo-video-pane">
-        <video class="demo-video" controls preload="metadata" poster="demo-poster.jpg">
+        <video class="demo-video" autoplay muted playsinline loop controls preload="auto" poster="demo-poster.jpg">
           <source src="zkassess-demo.mp4" type="video/mp4">
           Your browser doesn't support embedded video — <a href="zkassess-demo.mp4">download the demo</a> instead.
         </video>
@@ -434,7 +434,6 @@
   <div class="wrap">
     <div class="sec-label">The Problem</div>
     <h2>Most organizations don't know what cryptography they're running — or where.</h2>
-    <p class="sec-intro">Cryptography accumulates quietly: an old library here, a half-finished migration there, a config file nobody's revisited in years. Ask most security teams for a complete, current picture of every algorithm running across their systems, and the honest answer is that no one fully has one.</p>
 
     <div class="problem-grid">
       <div class="problem-card">
